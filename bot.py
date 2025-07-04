@@ -19,7 +19,7 @@ async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Здорова, брат! Я бот. Как сам?")
 
-updater = Updater(os.environ["TELEGRAM_TOKEN"])
+updater = telegram.ext.Updater(os.environ["TELEGRAM_TOKEN"])
 dp = updater.dispatcher
 dp.add_handler(CommandHandler('start', start))
 

@@ -16,6 +16,13 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text)
 
+# Обработчик команды /start
+def start(update: Update, context):
+    update.message.reply_text('Привет!')
+
+# Регистрируем обработчик команды /start
+dispatcher.add_handler(CommandHandler('start', start))
+
 async def main():
     app = Application.builder().token(TOKEN).updater(None).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))

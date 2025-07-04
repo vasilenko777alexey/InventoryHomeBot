@@ -16,10 +16,12 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text)
 #---------------------
+queue = asyncio.Queue()
+
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Здорова, брат! Я бот. Как сам?")
 
-updater = telegram.ext.Updater(os.environ["TELEGRAM_TOKEN"])
+updater = Updater(os.environ["TELEGRAM_TOKEN"], queue)
 dp = updater.dispatcher
 dp.add_handler(CommandHandler('start', start))
 

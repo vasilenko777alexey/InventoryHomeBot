@@ -4,7 +4,7 @@ from starlette.responses import Response, PlainTextResponse
 from starlette.requests import Request
 from starlette.routing import Route
 from telegram import Update
-from telegram.ext import Application, ContextTypes, MessageHandler, filters
+from telegram.ext import Application, ContextTypes, MessageHandler, Updater, CommandHandler, CallbackContext, filters
 
 TOKEN = os.environ["TELEGRAM_TOKEN"]
 URL   = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам
@@ -15,7 +15,7 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text)
-update.message.reply_text(update.message.text)
+
 
 # Обработчик команды /start
 #def start(update: Update, context):

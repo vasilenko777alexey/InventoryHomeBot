@@ -21,7 +21,7 @@ def start(update: Update, context):
     update.message.reply_text('Привет!')
 
 # Регистрируем обработчик команды /start
-dispatcher.add_handler(CommandHandler('start', start))
+# dispatcher.add_handler(CommandHandler('start', start))
 
 async def main():
     app = Application.builder().token(TOKEN).updater(None).build()

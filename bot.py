@@ -20,7 +20,7 @@ async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
 #def start(update: Update, context):
 #    update.message.reply_text('Привет!')
 
-bot = telebot.TeleBot(environ['TELEGRAM_TOKEN'])
+bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 
 bot_text = '''
 Howdy, how are you doing?

@@ -1,7 +1,7 @@
 import telebot
 from os import environ
 
-bot = telebot.TeleBot('TELEGRAM_TOKEN')
+bot = telebot.TeleBot(environ['TELEGRAM_TOKEN'])
 
 bot_text = '''
 Howdy, how are you doing?

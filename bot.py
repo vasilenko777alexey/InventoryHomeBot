@@ -15,25 +15,22 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text)
+#---------------------
+def start(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text("Здорова, брат! Я бот. Как сам?")
 
+updater = Updater('TELEGRAM_TOKEN')
+dp = updater.dispatcher
+dp.add_handler(CommandHandler('start', start))
+
+updater.start_polling()
+updater.idle()
+#---------------------
 
 # Обработчик команды /start
 #def start(update: Update, context):
 #    update.message.reply_text('Привет!')
 
-bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
-
-bot_text = '''
-Howdy, how are you doing?
-'''
-#.format(environ['PROJECT_NAME'])
-
-@bot.message_handler(commands=['start', 'help'])
-def send_welcome(message):
-	bot.reply_to(message, bot_text)
-from time import sleep
-bot.reply_to(message, bot_text)
-sleep(2)
 
 # Регистрируем обработчик команды /start
 #dispatcher.add_handler(CommandHandler('start', start))

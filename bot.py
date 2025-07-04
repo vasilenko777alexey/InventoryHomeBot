@@ -6,8 +6,8 @@ from starlette.routing import Route
 from telegram import Update
 from telegram.ext import Application, ContextTypes, MessageHandler, filters
 
-TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-URL   = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам
+TOKEN = os.environ["TELEGRAM_TOKEN"]
+URL   = os.environ["https://inventoryhomebot.onrender.com"]     # Render выдаёт значение сам
 PORT  = int(os.getenv("PORT", 8000))          # Render слушает этот PORT
 
 log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

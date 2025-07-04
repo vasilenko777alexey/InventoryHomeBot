@@ -1,5 +1,5 @@
 Flask
 PyTelegramBotAPI
-python-telegram-bot==20.*
+python-telegram-bot==13.13
 uvicorn
 starlette

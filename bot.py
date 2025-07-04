@@ -17,8 +17,21 @@ async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text)
 
 # Обработчик команды /start
-def start(update: Update, context):
-    update.message.reply_text('Привет!')
+#def start(update: Update, context):
+#    update.message.reply_text('Привет!')
+
+bot = telebot.TeleBot(environ['TELEGRAM_TOKEN'])
+
+bot_text = '''
+Howdy, how are you doing?
+'''
+#.format(environ['PROJECT_NAME'])
+
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message):
+	bot.reply_to(message, bot_text)
+from time import sleep
+sleep(2)
 
 # Регистрируем обработчик команды /start
 #dispatcher.add_handler(CommandHandler('start', start))

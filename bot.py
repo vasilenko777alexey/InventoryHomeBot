@@ -1,10 +1,10 @@
-import os, asyncio, logging, uvicorn
+import os, asyncio, logging, uvicorn, telebot
 from starlette.applications import Starlette
 from starlette.responses import Response, PlainTextResponse
 from starlette.requests import Request
 from starlette.routing import Route
 from telegram import Update
-from telegram.ext import Application, ContextTypes, MessageHandler, Dispatcher, CommandHandler, filters
+from telegram.ext import Application, ContextTypes, MessageHandler, filters
 
 TOKEN = os.environ["TELEGRAM_TOKEN"]
 URL   = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам
@@ -21,7 +21,7 @@ def start(update: Update, context):
     update.message.reply_text('Привет!')
 
 # Регистрируем обработчик команды /start
-dispatcher.add_handler(CommandHandler('start', start))
+#dispatcher.add_handler(CommandHandler('start', start))
 
 async def main():
     app = Application.builder().token(TOKEN).updater(None).build()

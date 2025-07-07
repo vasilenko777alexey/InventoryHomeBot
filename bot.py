@@ -21,6 +21,56 @@ async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text)
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здорова, брат! Я бот. Как сам?")
+    await find_and_process_excel
+# --- хендлеры --------------------------------------------------------------
+async def find_and_process_excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+
+    # Ищем в старых сообщениях файла Excel
+    # Получим последние 50 сообщений (можно больше или меньше)
+    messages = await context.bot.get_chat_history(chat_id=chat_id, limit=50)
+
+    excel_file_bytes = None
+
+    for msg in messages:
+        if msg.document:
+            filename = msg.document.file_name.lower()
+            if filename.endswith(('.xlsx', '.xlsm', '.xltx', '.xltm')):
+                file = await msg.document.get_file()
+                excel_file_bytes = await file.download_as_bytearray()
+                break
+
+    if not excel_file_bytes:
+        await update.message.reply_text("В недавних сообщениях не найден файл Excel.")
+        return
+
+    # Открываем файл из байтов
+    with io.BytesIO(excel_file_bytes) as bio:
+        wb = openpyxl.load_workbook(bio)
+        sheet = wb.active  # или wb['Имя листа']
+
+        # Читаем A1
+        a1_value = sheet['A1'].value
+
+        # Копируем в F2
+        sheet['F2'].value = a1_value
+
+        # Сохраняем обратно в байты
+        with io.BytesIO() as output:
+            wb.save(output)
+            output.seek(0)
+            new_excel_bytes = output.read()
+
+    # Отправляем сообщение с содержимым A1
+    await update.message.reply_text(f"Значение ячейки A1: {a1_value}")
+
+    # Отправляем обновлённый файл
+    await context.bot.send_document(
+        chat_id=chat_id,
+        document=io.BytesIO(new_excel_bytes),
+        filename='обновленный_файл.xlsx'
+    )
+
 #---------------------
 
 async def main():

@@ -24,11 +24,15 @@ async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здорова, брат! Я бот. Как сам?")
 
 async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Начало обработки excel файла")
+    
     chat_id = update.effective_chat.id
 
     # Ищем в старых сообщениях файла Excel
     # Получим последние 50 сообщений (можно больше или меньше)
     messages = await context.bot.get_chat_history(chat_id=chat_id, limit=50)
+
+    await update.message.reply_text("Этап 1 обработки excel файла")
 
     excel_file_bytes = None
 
@@ -39,10 +43,13 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 file = await msg.document.get_file()
                 excel_file_bytes = await file.download_as_bytearray()
                 break
+    await update.message.reply_text("Этап 2 обработки excel файла")
 
     if not excel_file_bytes:
         await update.message.reply_text("В недавних сообщениях не найден файл Excel.")
         return
+
+    await update.message.reply_text("Этап 3 обработки excel файла")
 
     # Открываем файл из байтов
     with io.BytesIO(excel_file_bytes) as bio:
@@ -61,6 +68,8 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
             output.seek(0)
             new_excel_bytes = output.read()
 
+    await update.message.reply_text("Этап 4 обработки excel файла")
+
     # Отправляем сообщение с содержимым A1
     await update.message.reply_text(f"Значение ячейки A1: {a1_value}")
 
@@ -70,6 +79,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         document=io.BytesIO(new_excel_bytes),
         filename='обновленный_файл.xlsx'
     )
+    await update.message.reply_text("Конец обработки excel файла")
 
 #-------------------------------------------------------------------
 

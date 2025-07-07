@@ -51,7 +51,7 @@ async def start(update: Update, context: CallbackContext) -> None:
 #dispatcher.add_handler(CommandHandler('start', start))
 
 async def main():
-    app = Application.builder().token(TOKEN).updater(TOKEN).build()
+    app = Application.builder().token(TOKEN).updater(None).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
     app.add_handler(CommandHandler('start', start)) 
     await app.bot.set_webhook(f"{URL}/telegram", allowed_updates=Update.ALL_TYPES)

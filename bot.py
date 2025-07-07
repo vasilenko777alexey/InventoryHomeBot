@@ -22,7 +22,6 @@ async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text)
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здорова, брат! Я бот. Как сам?")
-    await find_and_process_excel
 
 async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id

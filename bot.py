@@ -21,7 +21,7 @@ queue = asyncio.Queue()
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Здорова, брат! Я бот. Как сам?")
 
-updater = Updater(os.environ["TELEGRAM_TOKEN"], queue)
+updater = Updater(os.environ["TELEGRAM_TOKEN"], use_context=True)
 dp = updater.dispatcher
 dp.add_handler(CommandHandler('start', start))
 

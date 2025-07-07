@@ -10,6 +10,7 @@ print('Запуск бота...')
 
 TOKEN = os.environ["TELEGRAM_TOKEN"]
 URL   = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам
+print("URL   = os.environ[RENDER_EXTERNAL_URL]")
 print(os.environ["RENDER_EXTERNAL_URL"])
 PORT  = int(os.getenv("PORT", 10000))          # Render слушает этот PORT
 
@@ -22,8 +23,8 @@ async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здорова, брат! Я бот. Как сам?")
     await find_and_process_excel
-# --- хендлеры --------------------------------------------------------------
-async def find_and_process_excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
 
     # Ищем в старых сообщениях файла Excel
@@ -71,13 +72,15 @@ async def find_and_process_excel(update: Update, context: ContextTypes.DEFAULT_T
         filename='обновленный_файл.xlsx'
     )
 
-#---------------------
+#-------------------------------------------------------------------
 
 async def main():
     app = Application.builder().token(TOKEN).updater(None).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
     app.add_handler(CommandHandler('start', start)) 
+    app.add_handler(CommandHandler('excel', excel)) 
     await app.bot.set_webhook(f"{URL}/telegram", allowed_updates=Update.ALL_TYPES)
+    print("await app.bot.set_webhook(f{URL}/telegram, allowed_updates=Update.ALL_TYPES)")
     print(f"{URL}/telegram")
 
     async def telegram(request: Request) -> Response:

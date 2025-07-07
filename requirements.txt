@@ -3,3 +3,4 @@ PyTelegramBotAPI
 python-telegram-bot[webhooks]==20.*
 uvicorn
 starlette
+openpyxl

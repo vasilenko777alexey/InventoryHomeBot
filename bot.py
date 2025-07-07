@@ -5,6 +5,7 @@ from starlette.requests import Request
 from starlette.routing import Route
 from telegram import Update
 from telegram.ext import Application, ContextTypes, MessageHandler, Updater, CommandHandler, CallbackContext, filters
+from asyncio import queue
 
 TOKEN = os.environ["TELEGRAM_TOKEN"]
 URL   = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам
@@ -16,12 +17,13 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text)
 #---------------------
-queue = asyncio.Queue()
+my_queue = queue.Queue()
+#queue = asyncio.Queue()
 
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Здорова, брат! Я бот. Как сам?")
 
-updater = Updater(os.environ["TELEGRAM_TOKEN"], None)
+updater = Updater(os.environ["TELEGRAM_TOKEN"], update_queue=my_queue)
 dp = updater.dispatcher
 dp.add_handler(CommandHandler('start', start))
 

@@ -10,51 +10,25 @@ print('Запуск бота...')
 
 TOKEN = os.environ["TELEGRAM_TOKEN"]
 URL   = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам
+print(os.environ["RENDER_EXTERNAL_URL"])
 PORT  = int(os.getenv("PORT", 10000))          # Render слушает этот PORT
 
 log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 logging.basicConfig(format=log_fmt, level=logging.INFO)
 
+# --- хендлеры --------------------------------------------------------------
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text)
-#---------------------
-#my_queue = asyncio.Queue()
-#queue = asyncio.Queue()
-
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здорова, брат! Я бот. Как сам?")
-
-#updater = Updater(os.environ["TELEGRAM_TOKEN"], update_queue=my_queue)
-#dp = updater.dispatcher
-#dp.add_handler(CommandHandler('start', start))
-
-#updater.start_polling()
-#updater.idle()
-
-#async def start_commmand(update, context): 
-#    await update.message.reply_text('Привет! Добро пожаловать в магазин!') 
- 
-#if __name__ == '__main__': 
-#    application = Application.builder().token(keys.token).build() 
-#    application.add_handler(CommandHandler('start', start_commmand)) 
-#    application.run_polling(1.0) 
-
-
 #---------------------
-
-# Обработчик команды /start
-#def start(update: Update, context):
-#    update.message.reply_text('Привет!')
-
-
-# Регистрируем обработчик команды /start
-#dispatcher.add_handler(CommandHandler('start', start))
 
 async def main():
     app = Application.builder().token(TOKEN).updater(None).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
     app.add_handler(CommandHandler('start', start)) 
     await app.bot.set_webhook(f"{URL}/telegram", allowed_updates=Update.ALL_TYPES)
+    print(f"{URL}/telegram")
 
     async def telegram(request: Request) -> Response:
         await app.update_queue.put(Update.de_json(await request.json(), app.bot))

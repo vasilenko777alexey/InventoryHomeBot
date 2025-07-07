@@ -30,7 +30,8 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Ищем в старых сообщениях файла Excel
     # Получим последние 50 сообщений (можно больше или меньше)
-    messages = await context.bot.get_chat_history(chat_id=chat_id, limit=50)
+    #app
+    messages = await context.bot.get_updates(limit=100)
 
     await update.message.reply_text("Этап 1 обработки excel файла")
 
@@ -59,8 +60,8 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Читаем A1
         a1_value = sheet['A1'].value
 
-        # Копируем в F2
-        sheet['F2'].value = a1_value
+        # Копируем в A2
+        sheet['A2'].value = a1_value
 
         # Сохраняем обратно в байты
         with io.BytesIO() as output:

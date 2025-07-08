@@ -44,7 +44,30 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if message_to_copy.document:
         await context.bot.send_document(chat_id=chat_id, document=message_to_copy.document.file_id)
-    await update.message.reply_text("Документ id: " + str(message_to_copy.document.file_id))
+        await context.bot.send_message(chat_id=chat_id, "Документ id: " + str(message_to_copy.document.file_id))
+        file = await message_to_copy.document.get_file()
+        excel_file_bytes = await file.download_as_bytearray()
+
+        # Открываем файл из байтов
+        with io.BytesIO(excel_file_bytes) as bio:
+            wb = openpyxl.load_workbook(bio)
+            sheet = wb.active  # или wb['Имя листа']
+    
+            # Читаем A1
+            a1_value = sheet['A1'].value
+    
+            # Копируем в A2
+            sheet['A2'].value = a1_value
+    
+            # Сохраняем обратно в байты
+            with io.BytesIO() as output:
+                wb.save(output)
+                output.seek(0)
+                new_excel_bytes = output.read()
+    
+        await update.message.reply_text("Этап 2 обработки excel файла")
+        # Отправляем сообщение с содержимым A1
+        await update.message.reply_text(f"Значение ячейки A1: {a1_value}")
             
       
 

@@ -19,9 +19,9 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 # --- хендлеры --------------------------------------------------------------
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(update.message.text)
+    await update.message.reply_text(update.message.text, update.message.id)
 async def start(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text("Здорова, брат! Я бот. Как сам?")
+    await update.message.reply_text("Здравствуйте. Я бот. ")
 
 async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Начало обработки excel файла")

@@ -33,7 +33,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #app
     #messages = await context.bot.get_updates(limit=100)
 
-    message_id = 5
+    message_id = 9
     #msg_copy = context.bot.forward_message(chat_id, chat_id, message_id)
     
     message_to_copy = await context.bot.forward_message(chat_id, chat_id, message_id)

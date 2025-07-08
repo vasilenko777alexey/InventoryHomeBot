@@ -19,7 +19,7 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 # --- хендлеры --------------------------------------------------------------
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id))
+    await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(ctx.message.id))
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здравствуйте. Я бот. ")
 

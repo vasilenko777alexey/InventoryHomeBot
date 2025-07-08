@@ -33,13 +33,19 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #app
     #messages = await context.bot.get_updates(limit=100)
 
-    message_id = 3
+    message_id = 1
     #msg_copy = context.bot.forward_message(chat_id, chat_id, message_id)
     
     message_to_copy = await context.bot.forward_message(chat_id, chat_id, message_id)
-    await update.message.reply_text(chat_id=chat_id, text=message_to_copy.text)
+    await update.message.reply_text(text=message_to_copy.text)
     
     await update.message.reply_text("Этап 1 обработки excel файла")
+
+    if message_to_copy.document:
+            await context.bot.send_document(chat_id=chat_id, document=message_to_copy.document.file_id)
+            
+      
+
 '''
     excel_file_bytes = None
 

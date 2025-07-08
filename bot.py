@@ -31,10 +31,15 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Ищем в старых сообщениях файла Excel
     # Получим последние 50 сообщений (можно больше или меньше)
     #app
-    messages = await context.bot.get_updates(limit=100)
+    #messages = await context.bot.get_updates(limit=100)
 
+    message_id = 1
+    msg_copy = context.bot.copy_message(chat_id, chat_id, message_id)
+    msg_text = msg_copy.text
+    await update.message.reply_text("Сообщение " + message_id + " " + msg_text)
+    
     await update.message.reply_text("Этап 1 обработки excel файла")
-
+'''
     excel_file_bytes = None
 
     for msg in messages:
@@ -81,7 +86,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         filename='обновленный_файл.xlsx'
     )
     await update.message.reply_text("Конец обработки excel файла")
-
+'''
 #-------------------------------------------------------------------
 
 async def main():

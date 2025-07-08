@@ -34,7 +34,8 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #messages = await context.bot.get_updates(limit=100)
 
     message_id = 1
-    msg_copy = context.bot.forward_message(chat_id, chat_id, message_id)
+    #msg_copy = context.bot.forward_message(chat_id, chat_id, message_id)
+    msg_copy = telegram.forward_message(chat_id, chat_id, message_id)
     msg_text = msg_copy.text
     await update.message.reply_text("Сообщение " + message_id + " " + msg_text)
     

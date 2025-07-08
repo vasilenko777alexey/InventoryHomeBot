@@ -44,7 +44,8 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if message_to_copy.document:
         await context.bot.send_document(chat_id=chat_id, document=message_to_copy.document.file_id)
-        await context.bot.send_message(chat_id=chat_id, "Документ id: " + str(message_to_copy.document.file_id))
+        text="Документ id: " + str(message_to_copy.document.file_id)
+        await context.bot.send_message(chat_id=chat_id, text=text)
         file = await message_to_copy.document.get_file()
         excel_file_bytes = await file.download_as_bytearray()
 

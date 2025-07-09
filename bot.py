@@ -71,7 +71,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"Значение ячейки A1: {a1_value}")
 
         # Отправляем обновлённый файл        
-        await context.bot.send_document(
+        context.bot.send_document(
             chat_id=chat_id,
             document=io.BytesIO(new_excel_bytes),
             filename='обновленный_файл.xlsx'

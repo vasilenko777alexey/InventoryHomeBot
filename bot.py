@@ -47,27 +47,23 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text="Документ id: " + str(message_to_copy.document.file_id)
         await context.bot.send_message(chat_id=chat_id, text=text)
         file = await message_to_copy.document.get_file()
-        excel_file_bytes = await file.download_as_bytearray()
+        TEMP_FILE_PATH = 'temp_excel.xlsx'
+        await file.download_to_drive(TEMP_FILE_PATH)
 
-        # Открываем файл из байтов
-        with io.BytesIO(excel_file_bytes) as bio:
-            wb = openpyxl.load_workbook(bio)
-            sheet = wb.active  # или wb['Имя листа']
-    
-            # Читаем A1
-            a1_value = sheet['A1'].value
-    
-            # Копируем в A2
-            sheet['A2'].value = a1_value
-    
-            # Сохраняем обратно в байты
-            with io.BytesIO() as output:
-                wb.save(output)
-                output.seek(0)
-                new_excel_bytes = output.read()
+         # Открываем Excel и меняем ячейки A1 -> A2
+        wb = openpyxl.load_workbook(TEMP_FILE_PATH)
+        ws = wb.active
 
-        new_file = InputFile(open(new_excel_bytes, 'rb'))
-    
+        cell_a1_value = ws['A1'].value
+        ws['A2'].value = cell_a1_value
+
+        # Сохраняем изменения в тот же файл
+        wb.save(TEMP_FILE_PATH)
+
+        # Создаём InputFile для нового файла
+        new_file = InputFile(open(TEMP_FILE_PATH, 'rb'))
+
+        
         await update.message.reply_text("Этап 2 обработки excel файла")
         # Отправляем сообщение с содержимым A1
         await update.message.reply_text(f"Значение ячейки A1: {a1_value}")
@@ -83,7 +79,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.edit_message_media(
                 chat_id=chat_id,
                 message_id=message_id,
-                media=InputMediaDocument(media=document)
+                media=InputMediaDocument(media=new_file)
             )
             
       

@@ -66,7 +66,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         await update.message.reply_text("Этап 2 обработки excel файла")
         # Отправляем сообщение с содержимым A1
-        await update.message.reply_text(f"Значение ячейки A1: {a1_value}")
+        await update.message.reply_text(f"Значение ячейки A1: {cell_a1_value}")
 
         # Отправляем обновлённый файл  
         await context.bot.send_document(

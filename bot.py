@@ -61,10 +61,24 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         wb.save(TEMP_FILE_PATH)
 
         # Создаём InputFile для нового файла
-        new_file = InputFile(open(TEMP_FILE_PATH, 'rb'))
-
+        #new_file = InputFile(open(TEMP_FILE_PATH, 'rb'))
         
         await update.message.reply_text("Этап 2 обработки excel файла")
+        # Открываем файл для передачи в InputMediaDocument
+        with open(TEMP_FILE_PATH, 'rb') as f:
+            new_file = InputFile(f)
+
+            # Заменяем сообщение с файлом
+            await context.bot.edit_message_media(
+                chat_id=chat_id,
+                message_id=message_id,
+                media=InputMediaDocument(media=new_file)
+            )
+
+        await update.message.reply_text("Файл успешно обновлён.")
+
+
+        
         # Отправляем сообщение с содержимым A1
         await update.message.reply_text(f"Значение ячейки A1: {cell_a1_value}")
 
@@ -76,11 +90,11 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         #)
         await update.message.reply_text("Этап 3 обработки excel файла")
         
-        await context.bot.edit_message_media(
-                chat_id=chat_id,
-                message_id=message_id,
-                media=InputMediaDocument(media=new_file)
-            )
+        #await context.bot.edit_message_media(
+        #        chat_id=chat_id,
+        #        message_id=message_id,
+        #        media=InputMediaDocument(media=new_file)
+        #    )
         await update.message.reply_text("Конец обработки excel файла")
             
       

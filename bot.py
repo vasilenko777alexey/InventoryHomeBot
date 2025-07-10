@@ -65,16 +65,17 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 wb.save(output)
                 output.seek(0)
                 new_excel_bytes = output.read()
+
+        new_file = InputFile(open(output, 'rb'))
     
         await update.message.reply_text("Этап 2 обработки excel файла")
         # Отправляем сообщение с содержимым A1
         await update.message.reply_text(f"Значение ячейки A1: {a1_value}")
 
         # Отправляем обновлённый файл  
-        document=io.BytesIO(new_excel_bytes)
         await context.bot.send_document(
             chat_id=chat_id,
-            document=document,
+            document=new_file,
             filename='обновленный_файл.xlsx'
         )
         await update.message.reply_text("Конец обработки excel файла")

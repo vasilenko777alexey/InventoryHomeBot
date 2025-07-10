@@ -75,9 +75,9 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         #       media=InputMediaDocument(media=new_file)
         #   )
             
-        with open(TEMP_FILE_PATH, "rb") as file  
-        media = types.InputMediaDocument(file)  
-        bot.edit_message_media(chat_id=chat_id, message_id=message_id, media=media)  
+        with open(TEMP_FILE_PATH, "rb") as file:  
+            media = types.InputMediaDocument(file)  
+            await bot.edit_message_media(chat_id=chat_id, message_id=message_id, media=media)  
 
         await update.message.reply_text("Файл успешно обновлён.")
 

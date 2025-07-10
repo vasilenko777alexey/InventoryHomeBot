@@ -69,18 +69,19 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"Значение ячейки A1: {cell_a1_value}")
 
         # Отправляем обновлённый файл  
-        await context.bot.send_document(
-            chat_id=chat_id,
-            document=new_file,
-            filename='обновленный_файл.xlsx'
-        )
-        await update.message.reply_text("Конец обработки excel файла")
-
+        #await context.bot.send_document(
+        #    chat_id=chat_id,
+        #    document=new_file,
+        #    filename='обновленный_файл.xlsx'
+        #)
+        await update.message.reply_text("Этап 3 обработки excel файла")
+        
         await context.bot.edit_message_media(
                 chat_id=chat_id,
                 message_id=message_id,
                 media=InputMediaDocument(media=new_file)
             )
+        await update.message.reply_text("Конец обработки excel файла")
             
       
 

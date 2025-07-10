@@ -66,7 +66,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 output.seek(0)
                 new_excel_bytes = output.read()
 
-        new_file = InputFile(open(output, 'rb'))
+        new_file = InputFile(open(new_excel_bytes, 'rb'))
     
         await update.message.reply_text("Этап 2 обработки excel файла")
         # Отправляем сообщение с содержимым A1

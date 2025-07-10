@@ -3,7 +3,7 @@ from starlette.applications import Starlette
 from starlette.responses import Response, PlainTextResponse
 from starlette.requests import Request
 from starlette.routing import Route
-from telegram import Update
+from telegram import Update, InputFile, InputMediaDocument
 from telegram.ext import Application, ContextTypes, MessageHandler, Updater, CommandHandler, CallbackContext, filters, ContextTypes, ApplicationBuilder
 
 print('Запуск бота...') 

@@ -76,7 +76,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
         with open(TEMP_FILE_PATH, "rb") as file:  
             media = InputMediaDocument(file)  
-            message_id_2 = 5
+            message_id_2 = 351
             await context.bot.edit_message_media(chat_id=chat_id, message_id=message_id_2, media=media)  
 
         await update.message.reply_text("Файл успешно обновлён.")

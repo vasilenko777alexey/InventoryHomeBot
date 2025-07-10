@@ -31,7 +31,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Ищем в старых сообщениях файла Excel
     # Получим последние 50 сообщений (можно больше или меньше)
 
-    message_id = 9
+    message_id = 8
    
     message_to_copy = await context.bot.forward_message(chat_id, chat_id, message_id)
     if message_to_copy.text:

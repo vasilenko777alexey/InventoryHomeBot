@@ -31,7 +31,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Ищем в старых сообщениях файла Excel
     # Получим последние 50 сообщений (можно больше или меньше)
 
-    message_id = 8
+    message_id = 9
    
     message_to_copy = await context.bot.forward_message(chat_id, chat_id, message_id)
     if message_to_copy.text:
@@ -39,8 +39,8 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await update.message.reply_text("Этап 1 обработки excel файла")
 
-    #if message_to_copy.document:
-    if message_to_copy.text:
+    if message_to_copy.document:
+    #if message_to_copy.text:
         await context.bot.send_document(chat_id=chat_id, document=message_to_copy.document.file_id)
         text="Документ id: " + str(message_to_copy.document.file_id)
         await context.bot.send_message(chat_id=chat_id, text=text)
@@ -76,7 +76,8 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
         with open(TEMP_FILE_PATH, "rb") as file:  
             media = InputMediaDocument(file)  
-            await context.bot.edit_message_media(chat_id=chat_id, message_id=message_id, media=media)  
+            message_id_2 = 5
+            await context.bot.edit_message_media(chat_id=chat_id, message_id=message_id_2, media=media)  
 
         await update.message.reply_text("Файл успешно обновлён.")
 

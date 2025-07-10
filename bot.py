@@ -39,7 +39,8 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await update.message.reply_text("Этап 1 обработки excel файла")
 
-    if message_to_copy.document:
+    #if message_to_copy.document:
+    if message_to_copy.text:
         await context.bot.send_document(chat_id=chat_id, document=message_to_copy.document.file_id)
         text="Документ id: " + str(message_to_copy.document.file_id)
         await context.bot.send_message(chat_id=chat_id, text=text)

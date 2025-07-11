@@ -113,7 +113,8 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def main():
     app = Application.builder().token(TOKEN).updater(None).write_timeout(30).read_timeout(30).build()
-    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), echo))
+    #app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), echo)) # Обработчик всех текстовых сообщений, кроме команд
+    app.add_handler(MessageHandler(filters.TEXT, echo)) # Обработчик всех текстовых сообщений, кроме команд
     #app.add_handler(MessageHandler(content_types=['text'], def_text))
     app.add_handler(CommandHandler('start', start)) 
     app.add_handler(CommandHandler('excel', excel)) 

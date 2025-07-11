@@ -22,8 +22,9 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     #await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.message_id) + " " + str(update.message.reply_to_message))
     await update.message.reply_text(update.message.text )
-async def def_text(message):
-    await message.reply_text(update.message.text )
+async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.message_id) + " " + str(update.message.reply_to_message))
+    
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здравствуйте. Я бот. ")
 
@@ -115,8 +116,10 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def main():
     app = Application.builder().token(TOKEN).updater(None).write_timeout(30).read_timeout(30).build()
     
-    app.add_handler(MessageHandler(filters.ALL, echo)) # Обработчик всех текстовых сообщений, кроме команд
-    #app.add_handler(MessageHandler(filters.TEXT, echo)) # Обработчик всех текстовых сообщений, кроме команд
+    #app.add_handler(MessageHandler(filters.ALL, echo)) # Обработчик всех текстовых сообщений, кроме команд
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND) & (~filters.REPLY), echo)) # Обработчик всех текстовых сообщений, кроме команд
+    app.add_handler(MessageHandler(filters.REPLY & (~filters.COMMAND), def_reply)) # Обработчик всех текстовых сообщений, кроме команд
+    
     #app.add_handler(MessageHandler(def_text, content_types=['text']))
     app.add_handler(CommandHandler('start', start)) 
     app.add_handler(CommandHandler('excel', excel)) 

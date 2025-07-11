@@ -18,8 +18,11 @@ log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 # --- хендлеры --------------------------------------------------------------
+d_text
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.id))
+async def d_text(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(update.message.text )
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здравствуйте. Я бот. ")
 
@@ -105,57 +108,13 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 '''
     excel_file_bytes = None
-
-    for msg in messages:
-        if msg.document:
-            filename = msg.document.file_name.lower()
-            if filename.endswith(('.xlsx', '.xlsm', '.xltx', '.xltm')):
-                file = await msg.document.get_file()
-                excel_file_bytes = await file.download_as_bytearray()
-                break
-    await update.message.reply_text("Этап 2 обработки excel файла")
-
-    if not excel_file_bytes:
-        await update.message.reply_text("В недавних сообщениях не найден файл Excel.")
-        return
-
-    await update.message.reply_text("Этап 3 обработки excel файла")
-
-    # Открываем файл из байтов
-    with io.BytesIO(excel_file_bytes) as bio:
-        wb = openpyxl.load_workbook(bio)
-        sheet = wb.active  # или wb['Имя листа']
-
-        # Читаем A1
-        a1_value = sheet['A1'].value
-
-        # Копируем в A2
-        sheet['A2'].value = a1_value
-
-        # Сохраняем обратно в байты
-        with io.BytesIO() as output:
-            wb.save(output)
-            output.seek(0)
-            new_excel_bytes = output.read()
-
-    await update.message.reply_text("Этап 4 обработки excel файла")
-
-    # Отправляем сообщение с содержимым A1
-    await update.message.reply_text(f"Значение ячейки A1: {a1_value}")
-
-    # Отправляем обновлённый файл
-    await context.bot.send_document(
-        chat_id=chat_id,
-        document=io.BytesIO(new_excel_bytes),
-        filename='обновленный_файл.xlsx'
-    )
-    await update.message.reply_text("Конец обработки excel файла")
 '''
 #-------------------------------------------------------------------
 
 async def main():
     app = Application.builder().token(TOKEN).updater(None).write_timeout(30).read_timeout(30).build()
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), echo))
+    app.add_handler(MessageHandler(content_types=['text'], d_text))
     app.add_handler(CommandHandler('start', start)) 
     app.add_handler(CommandHandler('excel', excel)) 
     await app.bot.set_webhook(f"{URL}/telegram", allowed_updates=Update.ALL_TYPES)

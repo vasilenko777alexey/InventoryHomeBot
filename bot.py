@@ -21,7 +21,7 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.id))
-async def def_text(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+async def def_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text )
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здравствуйте. Я бот. ")
@@ -114,7 +114,7 @@ async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def main():
     app = Application.builder().token(TOKEN).updater(None).write_timeout(30).read_timeout(30).build()
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), echo))
-    app.add_handler(MessageHandler(content_types=['text'], def_text))
+    #app.add_handler(MessageHandler(content_types=['text'], def_text))
     app.add_handler(CommandHandler('start', start)) 
     app.add_handler(CommandHandler('excel', excel)) 
     await app.bot.set_webhook(f"{URL}/telegram", allowed_updates=Update.ALL_TYPES)

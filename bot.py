@@ -1,4 +1,4 @@
-import asyncio
+import os, asyncio
 from aiohttp import web, ClientSession
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
@@ -6,11 +6,17 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 # ==========================
 # ВАШ Токен бота
 # Получите у BotFather в Telegram
-TOKEN = 'ВАШ_ТОКЕН_ЗДЕСЬ'  # Замените на ваш токен
+# TOKEN = 'ВАШ_ТОКЕН_ЗДЕСЬ'  # Замените на ваш токен
 
 # URL вашего сервиса (после деплоя на Render)
 # Например: https://your-app-name.onrender.com/
-APP_URL = 'https://your-app-name.onrender.com/'  # Замените на ваш URL
+# APP_URL = 'https://your-app-name.onrender.com/'  # Замените на ваш URL
+
+TOKEN   = os.environ["TELEGRAM_TOKEN"]
+APP_URL = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам
+print("URL   = os.environ[RENDER_EXTERNAL_URL]")
+print(os.environ["RENDER_EXTERNAL_URL"])
+PORT  = int(os.getenv("PORT", 10000))          # Render слушает этот PORT
 
 # ==========================
 

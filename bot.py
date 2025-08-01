@@ -81,7 +81,7 @@ async def main():
     print("asyncio.create_task(keep_alive()) - ok")
 
     # Создаем экземпляр бота с помощью ApplicationBuilder
-    application = Application.Builder().token(TOKEN).build()
+    application = Application.builder().token(TOKEN).build()
 
     print("# Создаем экземпляр бота с помощью ApplicationBuilder - ok")
     print("application = ApplicationBuilder().token(TOKEN).build() - ok")

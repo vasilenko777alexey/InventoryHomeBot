@@ -5,3 +5,5 @@ uvicorn
 starlette
 openpyxl
 aiohttp
+gunicorn==21.2.0
+requests==2.32.3

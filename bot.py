@@ -1,7 +1,7 @@
 import os, asyncio
 from aiohttp import web, ClientSession
 from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import Application, ApplicationBuilder, CommandHandler, ContextTypes
 
 # ==========================
 # ВАШ Токен бота

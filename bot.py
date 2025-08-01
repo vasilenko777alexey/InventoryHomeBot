@@ -88,6 +88,8 @@ async def main():
     # Запускаем polling — опрос сервера Telegram за событиями
     await application.run_polling()
 
-if __name__ == '__main__':
-    # Запускаем основную функцию в asyncio-цикле
+#if __name__ == '__main__':
+#    # Запускаем основную функцию в asyncio-цикле
+#    asyncio.run(main())
+if __name__ == "__main__":
     asyncio.run(main())

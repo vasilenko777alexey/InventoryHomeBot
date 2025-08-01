@@ -77,8 +77,14 @@ async def main():
     # Запускаем задачу периодического пинга в фоне
     asyncio.create_task(keep_alive())
 
+    print("# Запускаем задачу периодического пинга в фоне - ok")
+    print("asyncio.create_task(keep_alive()) - ok")
+
     # Создаем экземпляр бота с помощью ApplicationBuilder
     application = ApplicationBuilder().token(TOKEN).build()
+
+    print("# Создаем экземпляр бота с помощью ApplicationBuilder - ok")
+    print("application = ApplicationBuilder().token(TOKEN).build() - ok")
 
     # Добавляем обработчик команды /start
     application.add_handler(CommandHandler('start', start))

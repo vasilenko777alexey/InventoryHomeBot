@@ -1,9 +1,9 @@
-Flask
-PyTelegramBotAPI
+Flask==3.0.3
+pyTelegramBotAPI==4.23.0
+gunicorn==21.2.0
+requests==2.32.3
 python-telegram-bot[webhooks]==20.*
 uvicorn
 starlette
 openpyxl
 aiohttp
-gunicorn==21.2.0
-requests==2.32.3

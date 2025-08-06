@@ -13,6 +13,7 @@ import json
 import logging
 import threading
 import time
+import asyncio
 from pathlib import Path
 
 import requests
@@ -185,4 +186,5 @@ def main() -> None:
 
 # Для локального теста: python bot.py
 if __name__ == "__main__":
-    main()
+    #main()
+    asyncio.run(main())

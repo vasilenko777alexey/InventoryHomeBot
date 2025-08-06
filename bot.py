@@ -24,6 +24,7 @@ from telegram import (
     constants,        # для parse_mode, если понадобится
 )
 from telegram.ext import (
+    Application,
     ApplicationBuilder,
     CommandHandler,
     ContextTypes,
@@ -162,7 +163,8 @@ def main() -> None:
     Точка входа для Render/Gunicorn: создаёт Application и запускает webhook-сервер.
     """
     # Build Application
-    application = ApplicationBuilder().token(BOT_TOKEN).build()
+    #application = ApplicationBuilder().token(BOT_TOKEN).build()
+    application = Application.builder().token(TOKEN).updater(None).write_timeout(30).read_timeout(30).build()
 
     # Регистрируем хендлеры напрямую
     application.add_handler(CommandHandler("start", start_cmd))

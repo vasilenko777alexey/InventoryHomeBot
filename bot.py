@@ -161,7 +161,7 @@ def main() -> None:
     Точка входа для Render/Gunicorn: создаёт Application и запускает webhook-сервер.
     """
     # Build Application
-    application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+    application = ApplicationBuilder().token(BOT_TOKEN).build()
 
     # Регистрируем хендлеры напрямую
     application.add_handler(CommandHandler("start", start_cmd))

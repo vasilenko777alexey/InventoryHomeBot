@@ -164,7 +164,7 @@ def main() -> None:
     """
     # Build Application
     #application = ApplicationBuilder().token(BOT_TOKEN).build()
-    application = Application.builder().token(BOT_TOKEN).updater(None).write_timeout(30).read_timeout(30).build()
+    application = Application.builder().token(BOT_TOKEN).write_timeout(30).read_timeout(30).build()
 
     # Регистрируем хендлеры напрямую
     application.add_handler(CommandHandler("start", start_cmd))

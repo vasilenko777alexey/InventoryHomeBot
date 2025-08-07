@@ -83,6 +83,7 @@ def handle_save(message: telebot.types.Message) -> None:
                 return "edit ok"
             except Exception as e:
                 app.logger.exception("Ошибка при изменении сообщения: %s", e)
+                app.logger.exception("Ошибка при изменении сообщения: %s", i)                
                 return "edit error"
     return "edit save"
 

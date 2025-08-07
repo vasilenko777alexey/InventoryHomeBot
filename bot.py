@@ -88,12 +88,16 @@ def handle_save(message: telebot.types.Message) -> None:
                 app.logger.exception("Ошибка при изменении сообщения: %s", e)
                 app.logger.exception("Ошибка при изменении сообщения: %s", i)           
     message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=9)  
-    bot.delete_message(message.chat.id, message_doc.message_id)
+    #bot.delete_message(message.chat.id, message_doc.message_id)
     if 'document' in message_doc:
         document = message_doc['document']
         filename = document.get('file_name', '')
         if filename == 'test excel.xlsx':
             bot.send_message(message.chat.id, "Документ есть! test excel.xlsx")
+        else:
+            bot.send_message(message.chat.id, "Документ найден но с другим именем: " + filename)
+    else:
+         bot.send_message(message.chat.id, "Документ в сообщении message_doc.message_id не найден")
             
 
 

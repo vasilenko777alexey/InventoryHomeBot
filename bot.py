@@ -92,8 +92,8 @@ def handle_save(message: telebot.types.Message) -> None:
     if 'document' in message_doc:
         document = message_doc['document']
         filename = document.get('file_name', '')
-        if filename == 'test.xlsx':
-            bot.send_message(message.chat.id, "Документ есть!")
+        if filename == 'test excel.xlsx':
+            bot.send_message(message.chat.id, "Документ есть! test excel.xlsx")
             
 
 

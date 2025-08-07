@@ -18,6 +18,8 @@ import requests
 from flask import Flask, request, abort
 import telebot  # библиотека pyTelegramBotAPI
 
+print('Запуск бота...') 
+
 # ---------------------------------------------------------------------
 # Конфигурация из переменных окружения
 # ---------------------------------------------------------------------
@@ -63,8 +65,10 @@ def handle_start(message: telebot.types.Message) -> None:
 @bot.message_handler(commands=["save"])
 def handle_save(message: telebot.types.Message) -> None:
     """Ответ на /start: одно слово "Привет!"."""
-    message_id = bot.send_message(message.chat.id, "Привет!")
-    bot.send_message(message.chat.id, message_id )
+    message_save = bot.send_message(message.chat.id, "Привет!")
+    bot.send_message(message.chat.id, message_save.message_id )
+    bot.delete_message(message.chat.id, message_save.message_id)
+    print('Удалили сообщение: message_id' + str(message_save.message_id) )
 
 
 

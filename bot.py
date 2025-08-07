@@ -68,6 +68,7 @@ def handle_start(message: telebot.types.Message) -> None:
 @bot.message_handler(commands=["save"])
 def handle_save(message: telebot.types.Message) -> None:
     """Ответ на /start: одно слово "Привет!"."""
+    app.logger.info("перед удалением ")
     message_save = bot.send_message(message.chat.id, "Привет!")    
     bot.delete_message(message.chat.id, message_save.message_id)
     print('Удалили сообщение message_id:' )
@@ -82,6 +83,7 @@ def handle_save(message: telebot.types.Message) -> None:
             except Exception as e:
                 app.logger.exception("Ошибка при изменении сообщения: %s", e)
                 return "edit error"
+    return "edit save"
 
                 
 

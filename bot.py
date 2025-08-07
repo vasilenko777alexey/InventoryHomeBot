@@ -79,25 +79,40 @@ def handle_save(message: telebot.types.Message) -> None:
     app.logger.info("Удалили сообщение message_id: %s", message_save.message_id)
     for i in range(1, message_save.message_id):  
         i += 1  
-        if i >= 583:
-            try:
-                bot.edit_message_text(chat_id=message.chat.id, message_id=i, text='EditText')
-                app.logger.info("Изменили сообщение: %s", i)
-                return "Изменили сообщение" , 200
-            except Exception as e:
-                app.logger.exception("Ошибка при изменении сообщения: %s", e)
-                app.logger.exception("Ошибка при изменении сообщения: %s", i)           
-    message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=9)  
+        #if i >= 583:
+        #    try:
+        #        bot.edit_message_text(chat_id=message.chat.id, message_id=i, text='EditText')
+        #        app.logger.info("Изменили сообщение: %s", i)
+        #        return "Изменили сообщение" , 200
+        #    except Exception as e:
+        #        #app.logger.exception("Ошибка при изменении сообщения: %s", e)
+        #        app.logger.exception("Ошибка при изменении сообщения: %s", i) 
+        app.logger.info("Проверяем сообщение %s", i)
+        try:
+            message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=9)
+            bot.delete_message(message.chat.id, message_doc.message_id)
+            if 'document' in message_doc:                
+                document = message_doc['document']
+                filename = document.get('file_name', '')
+                app.logger.info("В сообщении %s есть документ %s", i, filename)
+            else:
+                app.logger.info("В сообщении %s есть нет документа ", i)
+        except Exception as e:
+            app.logger.exception("Ошибка при проверке сообщения: %s", i) 
+            app.logger.exception("Ошибка при проверке сообщения: %s", e)
+            
+        
+    #message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=9)  
     #bot.delete_message(message.chat.id, message_doc.message_id)
-    if 'document' in message_doc:
-        document = message_doc['document']
-        filename = document.get('file_name', '')
-        if filename == 'test excel.xlsx':
-            bot.send_message(message.chat.id, "Документ есть! test excel.xlsx")
-        else:
-            bot.send_message(message.chat.id, "Документ найден но с другим именем: " + filename)
-    else:
-         bot.send_message(message.chat.id, "Документ в сообщении message_doc.message_id не найден")
+    #if 'document' in message_doc:
+    #    document = message_doc['document']
+    #    filename = document.get('file_name', '')
+    #    if filename == 'test excel.xlsx':
+    #        bot.send_message(message.chat.id, "Документ есть! test excel.xlsx")
+    #    else:
+    #        bot.send_message(message.chat.id, "Документ найден но с другим именем: " + filename)
+    #else:
+    #     bot.send_message(message.chat.id, "Документ в сообщении message_doc.message_id не найден")
             
 
 

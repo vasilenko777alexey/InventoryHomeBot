@@ -60,6 +60,14 @@ def handle_start(message: telebot.types.Message) -> None:
     """Ответ на /start: одно слово "Привет!"."""
     bot.send_message(message.chat.id, "Привет!")
 
+@bot.message_handler(commands=["save"])
+def handle_save(message: telebot.types.Message) -> None:
+    """Ответ на /start: одно слово "Привет!"."""
+    message_id = bot.send_message(message.chat.id, "Привет!")
+    bot.send_message(message.chat.id, message_id )
+
+
+
 
 # ---------------------------------------------------------------------
 # HTTP-маршруты

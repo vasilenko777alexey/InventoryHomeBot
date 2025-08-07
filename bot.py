@@ -79,7 +79,7 @@ def handle_save(message: telebot.types.Message) -> None:
     app.logger.info("Удалили сообщение message_id: %s", message_save.message_id)
     for i in range(1, message_save.message_id):  
         i += 1  
-        if i >= 570:
+        if i >= 583:
             try:
                 bot.edit_message_text(chat_id=message.chat.id, message_id=i, text='EditText')
                 app.logger.info("Изменили сообщение: %s", i)

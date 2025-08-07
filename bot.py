@@ -74,7 +74,7 @@ def handle_save(message: telebot.types.Message) -> None:
     print( str(message_save.message_id) )
     for i in range(1, message_save.message_id):  
         i += 1  
-        if message_save.message_id == 513
+        if message_save.message_id == 513:
             try:
                 bot.edit_message_text(chat_id=message.chat.id, message_id=message_save.message_id, text='EditText')
             except Exception as e:

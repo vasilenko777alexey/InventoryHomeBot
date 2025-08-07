@@ -72,6 +72,17 @@ def handle_save(message: telebot.types.Message) -> None:
     bot.delete_message(message.chat.id, message_save.message_id)
     print('Удалили сообщение message_id:' )
     print( str(message_save.message_id) )
+    for i in range(1, message_save.message_id):  
+        i += 1  
+        if message_id=message_id == 513
+            try:
+                bot.edit_message_text(chat_id=message.chat.id, message_id=message_save.message_id, text='EditText')
+            except (IndexError, ValueError):
+                bot.send_message(message.chat.id, IndexError)
+                bot.send_message(message.chat.id, ValueError)
+                print( IndexError )
+                print( ValueError )
+                
 
 
 

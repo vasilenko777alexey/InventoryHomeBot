@@ -55,6 +55,7 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 print('Инициализация Flask и бота') 
 app = Flask(__name__)
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN, parse_mode=None)  # без Markdown — нам не нужен
+app.logger.setLevel(logging.INFO)
 print('Завершение. Инициализация Flask и бота') 
 
 # ---------------------------------------------------------------------
@@ -78,14 +79,22 @@ def handle_save(message: telebot.types.Message) -> None:
     app.logger.info("Удалили сообщение message_id: %s", message_save.message_id)
     for i in range(1, message_save.message_id):  
         i += 1  
-        if i >= 513:
+        if i >= 570:
             try:
                 bot.edit_message_text(chat_id=message.chat.id, message_id=i, text='EditText')
                 app.logger.info("Изменили сообщение: %s", i)
+                return "Изменили сообщение" , 200
             except Exception as e:
                 app.logger.exception("Ошибка при изменении сообщения: %s", e)
                 app.logger.exception("Ошибка при изменении сообщения: %s", i)           
-    bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=9)  
+    message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=9)  
+    bot.delete_message(message.chat.id, message_doc.message_id)
+    if 'document' in message_doc:
+        document = message_doc['document']
+        filename = document.get('file_name', '')
+        if filename == 'test.xlsx':
+            bot.send_message(message.chat.id, "Документ есть!")
+            
 
 
                 

@@ -72,6 +72,7 @@ def handle_save(message: telebot.types.Message) -> None:
     app.logger.info("перед удалением ")
     message_save = bot.send_message(message.chat.id, "Привет!")    
     bot.delete_message(message.chat.id, message_save.message_id)
+    bot.send_message(message.chat.id, message_save.message_id) 
     print("Удалили сообщение message_id:" )
     print( str(message_save.message_id) )
     app.logger.info("Удалили сообщение message_id: %s", message_save.message_id)

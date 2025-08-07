@@ -10,7 +10,7 @@
 - Фоновый поток самопинга внешнего URL, чтобы не дать сервису уснуть.
 - Проверка секретного заголовка Telegram (X-Telegram-Bot-Api-Secret-Token).
 """
-
+import logging
 import os
 import time
 import threading
@@ -45,6 +45,9 @@ PING_INTERVAL_SECONDS = int(os.environ.get("PING_INTERVAL_SECONDS", "300"))
 # Включение/выключение самопинга
 SELF_PING_ENABLED = os.environ.get("SELF_PING", "1") == "1"
 
+log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+logging.basicConfig(format=log_fmt, level=logging.INFO)
+
 # ---------------------------------------------------------------------
 # Инициализация Flask и бота
 # ---------------------------------------------------------------------
@@ -65,10 +68,10 @@ def handle_start(message: telebot.types.Message) -> None:
 @bot.message_handler(commands=["save"])
 def handle_save(message: telebot.types.Message) -> None:
     """Ответ на /start: одно слово "Привет!"."""
-    message_save = bot.send_message(message.chat.id, "Привет!")
-    bot.send_message(message.chat.id, message_save.message_id )
+    message_save = bot.send_message(message.chat.id, "Привет!")    
     bot.delete_message(message.chat.id, message_save.message_id)
-    print('Удалили сообщение: message_id' + str(message_save.message_id) )
+    print('Удалили сообщение message_id:' )
+    print( str(message_save.message_id) )
 
 
 

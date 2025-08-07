@@ -10,7 +10,7 @@
 - Фоновый поток самопинга внешнего URL, чтобы не дать сервису уснуть.
 - Проверка секретного заголовка Telegram (X-Telegram-Bot-Api-Secret-Token).
 """
-#import logging
+import logging
 import os
 import time
 import threading
@@ -45,8 +45,8 @@ PING_INTERVAL_SECONDS = int(os.environ.get("PING_INTERVAL_SECONDS", "600"))
 # Включение/выключение самопинга
 SELF_PING_ENABLED = os.environ.get("SELF_PING", "1") == "1"
 
-#log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-#logging.basicConfig(format=log_fmt, level=logging.INFO)
+log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 # ---------------------------------------------------------------------
 # Инициализация Flask и бота
@@ -72,7 +72,7 @@ def handle_save(message: telebot.types.Message) -> None:
     app.logger.info("перед удалением ")
     message_save = bot.send_message(message.chat.id, "Привет!")    
     bot.delete_message(message.chat.id, message_save.message_id)
-    print('Удалили сообщение message_id:' )
+    print("Удалили сообщение message_id:" )
     print( str(message_save.message_id) )
     app.logger.info("Удалили сообщение message_id: %s", message_save.message_id)
     for i in range(1, message_save.message_id):  
@@ -83,8 +83,9 @@ def handle_save(message: telebot.types.Message) -> None:
                 app.logger.info("Изменили сообщение: %s", i)
             except Exception as e:
                 app.logger.exception("Ошибка при изменении сообщения: %s", e)
-                app.logger.exception("Ошибка при изменении сообщения: %s", i)                
-    return "edit save"
+                app.logger.exception("Ошибка при изменении сообщения: %s", i)           
+    bot.forward_message(message.chat.id', message.chat.id, 9)  
+
 
                 
 
@@ -199,6 +200,6 @@ if SELF_PING_ENABLED:
 
 # Локальный запуск (для отладки)
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", "5000"))
+    port = int(os.environ.get("PORT", "10000"))
     # host=0.0.0.0 важен на Render; локально тоже не мешает.
     app.run(host="0.0.0.0", port=port)

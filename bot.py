@@ -89,7 +89,7 @@ def handle_save(message: telebot.types.Message) -> None:
         #        app.logger.exception("Ошибка при изменении сообщения: %s", i) 
         app.logger.info("Проверяем сообщение %s", i)
         try:
-            message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=9)
+            message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=i)
             bot.delete_message(message.chat.id, message_doc.message_id)
             if 'document' in message_doc:                
                 document = message_doc['document']
@@ -98,8 +98,8 @@ def handle_save(message: telebot.types.Message) -> None:
             else:
                 app.logger.info("В сообщении %s есть нет документа ", i)
         except Exception as e:
-            app.logger.exception("Ошибка при проверке сообщения: %s", i) 
-            app.logger.exception("Ошибка при проверке сообщения: %s", e)
+            #app.logger.exception("Ошибка при проверке сообщения: %s", i) 
+            #app.logger.exception("Ошибка при проверке сообщения: %s", e)
             
         
     #message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=9)  

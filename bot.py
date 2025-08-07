@@ -10,7 +10,7 @@
 - Фоновый поток самопинга внешнего URL, чтобы не дать сервису уснуть.
 - Проверка секретного заголовка Telegram (X-Telegram-Bot-Api-Secret-Token).
 """
-import logging
+#import logging
 import os
 import time
 import threading
@@ -45,8 +45,8 @@ PING_INTERVAL_SECONDS = int(os.environ.get("PING_INTERVAL_SECONDS", "300"))
 # Включение/выключение самопинга
 SELF_PING_ENABLED = os.environ.get("SELF_PING", "1") == "1"
 
-log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-logging.basicConfig(format=log_fmt, level=logging.INFO)
+#log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+#logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 # ---------------------------------------------------------------------
 # Инициализация Flask и бота
@@ -77,11 +77,9 @@ def handle_save(message: telebot.types.Message) -> None:
         if message_id=message_id == 513
             try:
                 bot.edit_message_text(chat_id=message.chat.id, message_id=message_save.message_id, text='EditText')
-            except (IndexError, ValueError):
-                bot.send_message(message.chat.id, IndexError)
-                bot.send_message(message.chat.id, ValueError)
-                print( IndexError )
-                print( ValueError )
+            except Exception as e:
+                app.logger.exception("Ошибка при изменении сообщения: %s", e)
+
                 
 
 

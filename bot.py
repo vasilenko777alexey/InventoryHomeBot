@@ -23,11 +23,16 @@ from telegram import (
     InputMediaDocument,
     constants,        # для parse_mode, если понадобится
 )
+#from telegram.ext import Application, ContextTypes, MessageHandler, Updater, CommandHandler, CallbackContext, filters, ContextTypes, ApplicationBuilder
 from telegram.ext import (
     Application,
     ApplicationBuilder,
     CommandHandler,
+    MessageHandler,
     ContextTypes,
+    Updater,
+    CallbackContext, 
+    filters,
 )
 
 # ────────────────────────────────

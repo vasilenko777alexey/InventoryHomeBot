@@ -91,12 +91,12 @@ def handle_save(message: telebot.types.Message) -> None:
         try:
             message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=i)
             bot.delete_message(message.chat.id, message_doc.message_id)
-            if 'document' in message_doc:                
+            if message_doc.document:                
                 document = message_doc['document']
                 filename = document.get('file_name', '')
                 app.logger.info("В сообщении %s есть документ %s", i, filename)
             else:
-                app.logger.info("В сообщении %s есть нет документа ", i)
+                app.logger.info("В сообщении %s нет документа ", i)
         except Exception as e:
             app.logger.exception("Ошибка при проверке сообщения: %s", i) 
             #app.logger.exception("Ошибка при проверке сообщения: %s", e)

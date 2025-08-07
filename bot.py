@@ -81,11 +81,9 @@ def handle_save(message: telebot.types.Message) -> None:
             try:
                 bot.edit_message_text(chat_id=message.chat.id, message_id=i, text='EditText')
                 app.logger.info("Изменили сообщение: %s", i)
-                return "edit ok"
             except Exception as e:
                 app.logger.exception("Ошибка при изменении сообщения: %s", e)
                 app.logger.exception("Ошибка при изменении сообщения: %s", i)                
-                return "edit error"
     return "edit save"
 
                 

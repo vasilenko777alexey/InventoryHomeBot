@@ -41,7 +41,7 @@ BASE_URL = (
 )
 
 # Как часто пинговать себя (сек)
-PING_INTERVAL_SECONDS = int(os.environ.get("PING_INTERVAL_SECONDS", "300"))
+PING_INTERVAL_SECONDS = int(os.environ.get("PING_INTERVAL_SECONDS", "600"))
 # Включение/выключение самопинга
 SELF_PING_ENABLED = os.environ.get("SELF_PING", "1") == "1"
 
@@ -52,9 +52,10 @@ SELF_PING_ENABLED = os.environ.get("SELF_PING", "1") == "1"
 # Инициализация Flask и бота
 # ---------------------------------------------------------------------
 
+print('Инициализация Flask и бота') 
 app = Flask(__name__)
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN, parse_mode=None)  # без Markdown — нам не нужен
-
+print('Завершение. Инициализация Flask и бота') 
 
 # ---------------------------------------------------------------------
 # Хэндлеры Telegram
@@ -76,9 +77,9 @@ def handle_save(message: telebot.types.Message) -> None:
     app.logger.info("Удалили сообщение message_id: %s", message_save.message_id)
     for i in range(1, message_save.message_id):  
         i += 1  
-        if message_save.message_id == 513 or message_save.message_id == 514 or message_save.message_id == 512:
+        if i == 513 or i == 514 or i == 512:
             try:
-                bot.edit_message_text(chat_id=message.chat.id, message_id=message_save.message_id, text='EditText')
+                bot.edit_message_text(chat_id=message.chat.id, message_id=i, text='EditText')
                 return "edit ok"
             except Exception as e:
                 app.logger.exception("Ошибка при изменении сообщения: %s", e)

@@ -84,7 +84,7 @@ def handle_save(message: telebot.types.Message) -> None:
             except Exception as e:
                 app.logger.exception("Ошибка при изменении сообщения: %s", e)
                 app.logger.exception("Ошибка при изменении сообщения: %s", i)           
-    bot.forward_message(message.chat.id', message.chat.id, 9)  
+    bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=9)  
 
 
                 

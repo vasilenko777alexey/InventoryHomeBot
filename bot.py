@@ -98,7 +98,7 @@ def handle_save(message: telebot.types.Message) -> None:
             else:
                 app.logger.info("В сообщении %s есть нет документа ", i)
         except Exception as e:
-            #app.logger.exception("Ошибка при проверке сообщения: %s", i) 
+            app.logger.exception("Ошибка при проверке сообщения: %s", i) 
             #app.logger.exception("Ошибка при проверке сообщения: %s", e)
             
         

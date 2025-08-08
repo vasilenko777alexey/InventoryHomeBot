@@ -20,6 +20,7 @@ from flask import Flask, request, abort  # Flask — веб-сервер для 
 import telebot  # Библиотека TeleBot (pyTelegramBotAPI)
 from telebot import types  # Типы объектов Telegram (сообщения, апдейты и т.д.)
 from telebot.types import InputFile  # Класс для отправки файлов из памяти без записи на диск
+from telebot.async_telebot import AsyncTeleBot                 # Асинхронный TeleBot
 
 from openpyxl import Workbook  # Создание Excel-файла
 from openpyxl.drawing.image import Image as XLImage  # Вставка изображений в Excel
@@ -81,6 +82,10 @@ print('Завершение. Инициализация Flask и бота')
 async def handle_start(message: telebot.types.Message) -> None:
     """Ответ на /start: одно слово "Привет!"."""
     await bot.send_message(message.chat.id, "Привет!")
+
+@bot.message_handler(commands=["start"])                        # Обработчик команды /start
+async def handle_start(message: types.Message) -> None:
+    await bot.reply_to(message, "Привет!")                      # Асинхронный ответ
 
 @bot.message_handler(commands=["save"])
 async def handle_save(message: telebot.types.Message) -> None:

@@ -67,7 +67,7 @@ app = Flask(__name__)           # Создаём Flask-приложение (WSG
 bot = telebot.TeleBot(          # Создаём экземпляр бота
     TELEGRAM_BOT_TOKEN,         # Токен авторизации у Bot API
     #parse_mode=None,           # без Markdown — нам не нужен
-    parse_mode=None"HTML",      # Включаем HTML-разметку в сообщениях (на будущее)
+    parse_mode="HTML",      # Включаем HTML-разметку в сообщениях (на будущее)
     threaded=False              # Обрабатываем апдейты в основном потоке Flask (без доп. потоков TeleBot)
 )  
 app.logger.setLevel(logging.INFO)

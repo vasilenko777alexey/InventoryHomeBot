@@ -158,7 +158,7 @@ def handle_photo(message) -> None:
         wb.save(output)  # Сохраняем книгу в буфер (файл на диск не пишем)
         output.seek(0)  # Перематываем указатель в начало, чтобы Telegram прочитал файл целиком
 
-        doc = InputFile(output, filename="image_in_excel.xlsx")  # Готовим «виртуальный файл» для отправки
+        doc = InputFile(output, file_name="image_in_excel.xlsx")  # Готовим «виртуальный файл» для отправки
         bot.send_document(  # Отправляем пользователю документ (Excel-файл)
             message.chat.id,  # Чат, откуда пришло сообщение
             doc,              # Сам файл

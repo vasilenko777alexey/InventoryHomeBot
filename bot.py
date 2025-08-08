@@ -10,15 +10,25 @@
 - Фоновый поток самопинга внешнего URL, чтобы не дать сервису уснуть.
 - Проверка секретного заголовка Telegram (X-Telegram-Bot-Api-Secret-Token).
 """
-import logging
-import os
-import time
+# -*- coding: utf-8 -*-  # Указываем кодировку исходника (русский в строках)
+import os  # Стандартный модуль для доступа к переменным окружения (токен, URL и т.п.)
+import io  # Для работы с потоками в памяти (BytesIO вместо временных файлов)
+import time  # Небольшая пауза перед установкой webhook (устойчивее при рестартах)
+import logging  # Логирование (удобно смотреть логи на Render)
+from flask import Flask, request, abort  # Flask — веб-сервер для приёма webhook от Telegram
+
+import telebot  # Библиотека TeleBot (pyTelegramBotAPI)
+from telebot import types  # Типы объектов Telegram (сообщения, апдейты и т.д.)
+from telebot.types import InputFile  # Класс для отправки файлов из памяти без записи на диск
+
+from openpyxl import Workbook  # Создание Excel-файла
+from openpyxl.drawing.image import Image as XLImage  # Вставка изображений в Excel
+from PIL import Image as PILImage  # Библиотека Pillow для работы с изображениями
+
 import threading
 import requests
-from flask import Flask, request, abort
-import telebot  # библиотека pyTelegramBotAPI
 
-print('Запуск бота...') 
+print('--> Запуск бота...') 
 
 # ---------------------------------------------------------------------
 # Конфигурация из переменных окружения
@@ -53,8 +63,13 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 # ---------------------------------------------------------------------
 
 print('Инициализация Flask и бота') 
-app = Flask(__name__)
-bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN, parse_mode=None)  # без Markdown — нам не нужен
+app = Flask(__name__)           # Создаём Flask-приложение (WSGI), которое будем запускать через gunicorn на Render
+bot = telebot.TeleBot(          # Создаём экземпляр бота
+    TELEGRAM_BOT_TOKEN,         # Токен авторизации у Bot API
+    #parse_mode=None,           # без Markdown — нам не нужен
+    parse_mode=None"HTML",      # Включаем HTML-разметку в сообщениях (на будущее)
+    threaded=False              # Обрабатываем апдейты в основном потоке Flask (без доп. потоков TeleBot)
+)  
 app.logger.setLevel(logging.INFO)
 print('Завершение. Инициализация Flask и бота') 
 
@@ -63,12 +78,12 @@ print('Завершение. Инициализация Flask и бота')
 # ---------------------------------------------------------------------
 
 @bot.message_handler(commands=["start"])
-def handle_start(message: telebot.types.Message) -> None:
+async def handle_start(message: telebot.types.Message) -> None:
     """Ответ на /start: одно слово "Привет!"."""
     bot.send_message(message.chat.id, "Привет!")
 
 @bot.message_handler(commands=["save"])
-def handle_save(message: telebot.types.Message) -> None:
+async def handle_save(message: telebot.types.Message) -> None:
     """Ответ на /start: одно слово "Привет!"."""
     app.logger.info("перед удалением ")
     message_save = bot.send_message(message.chat.id, "Привет!")    
@@ -111,33 +126,42 @@ def handle_save(message: telebot.types.Message) -> None:
                       
                 except Exception as e:      
                     logging.error(f"Ошибка при обработке файла: {e}")  
-
-
-                
-                #document = message_doc['document']
-                #filename = document.get('file_name', '')
-                #app.logger.info("В сообщении %s есть документ %s", i, filename)
-            else:
-                
+                    
+            else:                
                 app.logger.info("В сообщении %s нет документа ", i)
+                
         except Exception as e:
             app.logger.exception("Ошибка при проверке сообщения: %s", i) 
             #app.logger.exception("Ошибка при проверке сообщения: %s", e)
-            
-        
-    #message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=9)  
-    #bot.delete_message(message.chat.id, message_doc.message_id)
-    #if 'document' in message_doc:
-    #    document = message_doc['document']
-    #    filename = document.get('file_name', '')
-    #    if filename == 'test excel.xlsx':
-    #        bot.send_message(message.chat.id, "Документ есть! test excel.xlsx")
-    #    else:
-    #        bot.send_message(message.chat.id, "Документ найден но с другим именем: " + filename)
-    #else:
-    #     bot.send_message(message.chat.id, "Документ в сообщении message_doc.message_id не найден")
-            
+   
+@bot.message_handler(content_types=["photo"])  # Хэндлер на обычные «фото» (когда пользователь отправляет картинку как фото)
+async def handle_photo(message) -> None:  
+    try:
+        largest_photo = message.photo[-1]  # В списке sizes берём самое крупное фото (последний элемент)
+        file_info = bot.get_file(largest_photo.file_id)  # Запрашиваем у Telegram путь к файлу
+        file_bytes = bot.download_file(file_info.file_path)  # Скачиваем файл байтами
 
+        img = PILImage.open(io.BytesIO(file_bytes))  # Открываем картинку из памяти через Pillow
+        wb = Workbook()  # Создаём новый Excel-файл
+        ws = wb.active  # Берём активный лист
+        ws.title = "Лист1"  # Переименовываем лист (необязательно, но наглядно)
+
+        xl_img = XLImage(img)  # Оборачиваем PIL-картинку в объект openpyxl для вставки
+        ws.add_image(xl_img, "B1")  # Вставляем изображение с привязкой к ячейке B1
+
+        output = io.BytesIO()  # Создаём буфер в памяти для сохранения Excel
+        wb.save(output)  # Сохраняем книгу в буфер (файл на диск не пишем)
+        output.seek(0)  # Перематываем указатель в начало, чтобы Telegram прочитал файл целиком
+
+        doc = InputFile(output, filename="image_in_excel.xlsx")  # Готовим «виртуальный файл» для отправки
+        bot.send_document(  # Отправляем пользователю документ (Excel-файл)
+            message.chat.id,  # Чат, откуда пришло сообщение
+            doc,              # Сам файл
+            caption="Картинка вставлена в ячейку B1."  # Подпись к файлу (наглядно)
+        )
+    except Exception as e:  # Перехватываем любые исключения, чтобы бот не падал
+        logging.exception("Ошибка обработки фото")  # Пишем стек в логи
+        bot.reply_to(message, f"Упс, не получилось обработать изображение: {e}")  # Сообщаем пользователю об ошибке
 
                 
 

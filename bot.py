@@ -78,10 +78,10 @@ print('Завершение. Инициализация Flask и бота')
 # Хэндлеры Telegram
 # ---------------------------------------------------------------------
 
-@bot.message_handler(commands=["start"])
-async def handle_start(message: telebot.types.Message) -> None:
-    """Ответ на /start: одно слово "Привет!"."""
-    await bot.send_message(message.chat.id, "Привет!")
+#@bot.message_handler(commands=["start"])
+#async def handle_start(message: telebot.types.Message) -> None:
+#    """Ответ на /start: одно слово "Привет!"."""
+3    await bot.send_message(message.chat.id, "Привет!")
 
 @bot.message_handler(commands=["start"])                        # Обработчик команды /start
 async def handle_start(message: types.Message) -> None:

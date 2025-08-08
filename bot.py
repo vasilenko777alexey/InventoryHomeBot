@@ -89,12 +89,33 @@ def handle_save(message: telebot.types.Message) -> None:
         #        app.logger.exception("Ошибка при изменении сообщения: %s", i) 
         app.logger.info("Проверяем сообщение %s", i)
         try:
+            app.logger.info("Начало попытки проверки сообщения %s", i)
             message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=i)
             bot.delete_message(message.chat.id, message_doc.message_id)
-            if message_doc.document:                
-                document = message_doc['document']
-                filename = document.get('file_name', '')
-                app.logger.info("В сообщении %s есть документ %s", i, filename)
+            if message_doc.document:      
+                try:  
+                    # Сохраняем файл  
+                    file_info = message_doc.document  
+                    file_name = f"{file_info.file_name}"  
+                    app.logger.info("В сообщении %s есть документ %s", i, file_name)
+                    #file_path = os.path.join('files', file_name)  
+                    #bot.download_file(file_info.file_id, file_path)  
+                      
+                    ## Отправляем файл обратно с комментариями  
+                    #bot.send_message(message.chat.id, f"Файл '{file_name}' успешно сохранен и отправлен обратно.")  
+                    #bot.send_document(message.chat.id, file_path)  
+                      
+                    # Удаляем локальный файл  
+                    #os.remove(file_path)  
+                      
+                except Exception as e:      
+                    logging.error(f"Ошибка при обработке файла: {e}")  
+
+
+                
+                #document = message_doc['document']
+                #filename = document.get('file_name', '')
+                #app.logger.info("В сообщении %s есть документ %s", i, filename)
             else:
                 app.logger.info("В сообщении %s нет документа ", i)
         except Exception as e:

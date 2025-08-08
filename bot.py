@@ -80,15 +80,15 @@ print('Завершение. Инициализация Flask и бота')
 @bot.message_handler(commands=["start"])
 async def handle_start(message: telebot.types.Message) -> None:
     """Ответ на /start: одно слово "Привет!"."""
-    bot.send_message(message.chat.id, "Привет!")
+    await bot.send_message(message.chat.id, "Привет!")
 
 @bot.message_handler(commands=["save"])
 async def handle_save(message: telebot.types.Message) -> None:
     """Ответ на /start: одно слово "Привет!"."""
     app.logger.info("перед удалением ")
-    message_save = bot.send_message(message.chat.id, "Привет!")    
-    bot.delete_message(message.chat.id, message_save.message_id)
-    bot.send_message(message.chat.id, message_save.message_id) 
+    message_save = await bot.send_message(message.chat.id, "Привет!")    
+    await bot.delete_message(message.chat.id, message_save.message_id)
+    await bot.send_message(message.chat.id, message_save.message_id) 
     print("Удалили сообщение message_id:" )
     print( str(message_save.message_id) )
     app.logger.info("Удалили сообщение message_id: %s", message_save.message_id)
@@ -105,15 +105,15 @@ async def handle_save(message: telebot.types.Message) -> None:
         app.logger.info("Проверяем сообщение %s", i)
         try:
             app.logger.info("Начало попытки проверки сообщения %s", i)
-            message_doc= bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=i)
-            bot.delete_message(message.chat.id, message_doc.message_id)
+            message_doc= await bot.forward_message(chat_id=message.chat.id, from_chat_id=message.chat.id, message_id=i)
+            await bot.delete_message(message.chat.id, message_doc.message_id)
             if message_doc.document:      
                 try:  
                     # Сохраняем файл  
                     file_info = message_doc.document  
                     file_name = f"{file_info.file_name}"  
                     app.logger.info("В сообщении %s есть документ %s", i, file_name)
-                    bot.send_message(message.chat.id, "В сообщении есть документ: " + str(i) + " :" + str(file_name))
+                    await bot.send_message(message.chat.id, "В сообщении есть документ: " + str(i) + " :" + str(file_name))
                     #file_path = os.path.join('files', file_name)  
                     #bot.download_file(file_info.file_id, file_path)  
                       
@@ -138,8 +138,8 @@ async def handle_save(message: telebot.types.Message) -> None:
 async def handle_photo(message) -> None:  
     try:
         largest_photo = message.photo[-1]  # В списке sizes берём самое крупное фото (последний элемент)
-        file_info = bot.get_file(largest_photo.file_id)  # Запрашиваем у Telegram путь к файлу
-        file_bytes = bot.download_file(file_info.file_path)  # Скачиваем файл байтами
+        file_info = await bot.get_file(largest_photo.file_id)  # Запрашиваем у Telegram путь к файлу
+        file_bytes = await bot.download_file(file_info.file_path)  # Скачиваем файл байтами
 
         img = PILImage.open(io.BytesIO(file_bytes))  # Открываем картинку из памяти через Pillow
         wb = Workbook()  # Создаём новый Excel-файл
@@ -154,14 +154,14 @@ async def handle_photo(message) -> None:
         output.seek(0)  # Перематываем указатель в начало, чтобы Telegram прочитал файл целиком
 
         doc = InputFile(output, filename="image_in_excel.xlsx")  # Готовим «виртуальный файл» для отправки
-        bot.send_document(  # Отправляем пользователю документ (Excel-файл)
+        await bot.send_document(  # Отправляем пользователю документ (Excel-файл)
             message.chat.id,  # Чат, откуда пришло сообщение
             doc,              # Сам файл
             caption="Картинка вставлена в ячейку B1."  # Подпись к файлу (наглядно)
         )
     except Exception as e:  # Перехватываем любые исключения, чтобы бот не падал
         logging.exception("Ошибка обработки фото")  # Пишем стек в логи
-        bot.reply_to(message, f"Упс, не получилось обработать изображение: {e}")  # Сообщаем пользователю об ошибке
+        await bot.reply_to(message, f"Упс, не получилось обработать изображение: {e}")  # Сообщаем пользователю об ошибке
 
                 
 

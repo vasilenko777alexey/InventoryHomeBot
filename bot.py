@@ -98,6 +98,7 @@ def handle_save(message: telebot.types.Message) -> None:
                     file_info = message_doc.document  
                     file_name = f"{file_info.file_name}"  
                     app.logger.info("В сообщении %s есть документ %s", i, file_name)
+                    bot.send_message(message.chat.id, "В сообщении есть документ: " + str(i) + " :" + str(file_name))
                     #file_path = os.path.join('files', file_name)  
                     #bot.download_file(file_info.file_id, file_path)  
                       
@@ -117,6 +118,7 @@ def handle_save(message: telebot.types.Message) -> None:
                 #filename = document.get('file_name', '')
                 #app.logger.info("В сообщении %s есть документ %s", i, filename)
             else:
+                
                 app.logger.info("В сообщении %s нет документа ", i)
         except Exception as e:
             app.logger.exception("Ошибка при проверке сообщения: %s", i) 

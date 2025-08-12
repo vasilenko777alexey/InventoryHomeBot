@@ -75,10 +75,6 @@ class Game:
                 "desc": "Вы в деревне. На горизонте виднеется зловещий замок.",
                 "choices": ["Пойти к замку"]
             },
-            "Лес": {
-                "desc": "Густой и мрачный лес. Вы слышите странные звуки.",
-                "choices": ["Идти дальше", "Вернуться в деревню"]
-            },
             "Замок": {
                 "desc": "Вы в замке. Перед вами длинный коридор.",
                 "choices": ["Исследовать коридор", "Вернуться в лес"]
@@ -87,11 +83,14 @@ class Game:
 
     def play(self):
         while self.current_location != "Конец":
-            print(f"\nВы находитесь в {self.current_location}:\n{self.locations[self.current_location]['desc']}")
-            choices = self.locations[self.current_location]['choices']
-            print("\nВаши варианты:", "\n".join(f"{i + 1}. {choice}" for i, choice in enumerate(choices)))
+            bot.send_message(message.chat.id, 
+                f"\nВы находитесь в {self.current_location}:\n{self.locations[self.current_location]['desc']}")
             
-            choice_index = int(input("Ваш выбор (1-{})? ".format(len(choices)))) - 1
+            choices = self.locations[self.current_location]['choices']
+            bot.send_message(message.chat.id, 
+                f"\nВаши варианты: {', '.join(choices)}")
+            
+            choice_index = int(message.text) - 1
             
             if choice_index == 0:
                 self.current_location = self.locations[self.current_location]['choices'][choice_index]
@@ -99,13 +98,14 @@ class Game:
                 self.current_location = "Деревня"
                 
             if self.current_location == "Замок":
-                print("Вы находите сундук! Открыть? (да/нет)")
-                if input().lower() == "да":
+                bot.send_message(message.chat.id, "Вы находите сундук! Открыть? (да/нет)")
+                if message.text.lower() == "да":
                     self.player.find_treasure()
-                    print("Вы нашли сокровище!")
+                    bot.send_message(message.chat.id, "Вы нашли сокровище!")
+                    self.current_location = "Конец"
 
     def game_over(self):
-        print("Игра окончена! Вы вернулись в деревню.")
+        bot.send_message(message.chat.id, "Игра окончена! Вы вернулись в деревню.")
 
 class Player:
     def __init__(self, name):
@@ -115,16 +115,7 @@ class Player:
 
     def find_treasure(self):
         self.treasure += 1
-        print(f"Вы нашли {self.treasure} сокровищ!")
-
-# Обработчик сообщений бота
-def handle_message(message):  
-    bot.send_message(message.chat.id, 
-                         "Добро пожаловать в игру 'Тени Заброшенного Замка'! Выберите 'Начать игру'")
-    
-    game = Game()
-    game.play()
-    bot.send_message(message.chat.id, "Игра окончена! Вы вернулись в деревню.")
+        bot.send_message(message.chat.id, f"Вы нашли {self.treasure} сокровищ!")
     
 
 
@@ -155,7 +146,11 @@ print('Завершение. Инициализация Flask и бота')
 @bot.message_handler(commands=["start"])                        # Обработчик команды /start
 def handle_start(message: types.Message) -> None:
     bot.reply_to(message, "Привет!")                      
-    handle_message(message)
+    bot.send_message(message.chat.id, 
+        "Добро пожаловать в игру 'Тени Заброшенного Замка'! Выберите 'Начать игру'")
+    game = Game()
+    game.play()
+    bot.send_message(message.chat.id, "Игра окончена! Вы вернулись в деревню.")
 
 @bot.message_handler(commands=["save"])
 def handle_save(message: telebot.types.Message) -> None:

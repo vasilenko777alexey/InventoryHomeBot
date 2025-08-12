@@ -31,6 +31,7 @@ import requests
 
 import random
 from random import choice
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 
 print('--> Запуск бота...') 
 
@@ -75,6 +76,10 @@ class Game:
                 "desc": "Вы в деревне. На горизонте виднеется зловещий замок.",
                 "choices": ["Пойти к замку"]
             },
+            "Лес": {
+                "desc": "Густой и мрачный лес. Вы слышите странные звуки.",
+                "choices": ["Идти дальше", "Вернуться в деревню"]
+            },
             "Замок": {
                 "desc": "Вы в замке. Перед вами длинный коридор.",
                 "choices": ["Исследовать коридор", "Вернуться в лес"]
@@ -83,29 +88,38 @@ class Game:
 
     def play(self):
         while self.current_location != "Конец":
-            bot.send_message(message.chat.id, 
-                f"\nВы находитесь в {self.current_location}:\n{self.locations[self.current_location]['desc']}")
+            keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+            for i, choice in enumerate(self.locations[self.current_location]["choices"]):
+                keyboard.add(KeyboardButton(choice))
             
-            choices = self.locations[self.current_location]['choices']
-            bot.send_message(message.chat.id, 
-                f"\nВаши варианты: {', '.join(choices)}")
+            bot.send_message(chat_id, 
+                            f"\nВы находитесь в {self.current_location}:\n{self.locations[self.current_location]['desc']}", 
+                            reply_markup=keyboard)
             
-            choice_index = int(message.text) - 1
+            choice_text = bot.get_updates(timeout=10)[0].message.text
+            if choice_text in self.locations[self.current_location]["choices"]:
+                if choice_text == self.locations[self.current_location]["choices"][0]:
+                    self.current_location = self.locations[self.current_location]["choices"][0]
+                else:
+                    self.current_location = "Деревня"
             
-            if choice_index == 0:
-                self.current_location = self.locations[self.current_location]['choices'][choice_index]
-            else:
-                self.current_location = "Деревня"
-                
             if self.current_location == "Замок":
-                bot.send_message(message.chat.id, "Вы находите сундук! Открыть? (да/нет)")
-                if message.text.lower() == "да":
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+                keyboard.add(KeyboardButton("Открыть сундук"))
+                keyboard.add(KeyboardButton("Вернуться"))
+                
+                bot.send_message(chat_id, 
+                                "Вы в замке. Хотите открыть сундук?", 
+                                reply_markup=keyboard)
+                
+                choice_text = bot.get_updates(timeout=10)[0].message.text
+                if choice_text == "Открыть сундук":
                     self.player.find_treasure()
-                    bot.send_message(message.chat.id, "Вы нашли сокровище!")
+                    bot.send_message(chat_id, "Вы нашли сокровище!")
                     self.current_location = "Конец"
 
     def game_over(self):
-        bot.send_message(message.chat.id, "Игра окончена! Вы вернулись в деревню.")
+        bot.send_message(chat_id, "Игра окончена! Вы вернулись в деревню.")
 
 class Player:
     def __init__(self, name):
@@ -115,7 +129,7 @@ class Player:
 
     def find_treasure(self):
         self.treasure += 1
-        bot.send_message(message.chat.id, f"Вы нашли {self.treasure} сокровищ!")
+        print(f"Вы нашли {self.treasure} сокровищ!")
     
 
 

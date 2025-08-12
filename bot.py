@@ -30,6 +30,7 @@ import threading
 import requests
 
 import random
+from random import choice
 
 print('--> Запуск бота...') 
 
@@ -63,29 +64,37 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 # ---------------------------------------------------------------------
 # Описание классов
 # ---------------------------------------------------------------------
+
+# Класс игры
 class Game:
     def __init__(self):
         self.player = Player("Игрок")
         self.current_location = "Деревня"
         self.locations = {
-            "Деревня": {"desc": "Вы в деревне. На горизонте виднеется зловещий замок.", 
-                       "choices": ["Пойти к замку"]},
-            "Лес": {"desc": "Густой и мрачный лес. Вы слышите странные звуки.", 
-                       "choices": ["Идти дальше", "Вернуться в деревню"]},
-            "Замок": {"desc": "Вы в замке. Перед вами длинный коридор.", 
-                       "choices": ["Исследовать коридор", "Вернуться в лес"]}
+            "Деревня": {
+                "desc": "Вы в деревне. На горизонте виднеется зловещий замок.",
+                "choices": ["Пойти к замку"]
+            },
+            "Лес": {
+                "desc": "Густой и мрачный лес. Вы слышите странные звуки.",
+                "choices": ["Идти дальше", "Вернуться в деревню"]
+            },
+            "Замок": {
+                "desc": "Вы в замке. Перед вами длинный коридор.",
+                "choices": ["Исследовать коридор", "Вернуться в лес"]
+            }
         }
-        
+
     def play(self):
         while self.current_location != "Конец":
             print(f"\nВы находитесь в {self.current_location}:\n{self.locations[self.current_location]['desc']}")
-            for i, choice in enumerate(self.locations[self.current_location]['choices']):
-                print(f"{i + 1}. {choice}")
-                
-            choice = int(input("Ваш выбор (1-{})? ".format(len(self.locations[self.current_location]['choices'])))) - 1
+            choices = self.locations[self.current_location]['choices']
+            print("\nВаши варианты:", "\n".join(f"{i + 1}. {choice}" for i, choice in enumerate(choices)))
             
-            if choice == 0:
-                self.current_location = self.locations[self.current_location]['choices'][choice]
+            choice_index = int(input("Ваш выбор (1-{})? ".format(len(choices)))) - 1
+            
+            if choice_index == 0:
+                self.current_location = self.locations[self.current_location]['choices'][choice_index]
             else:
                 self.current_location = "Деревня"
                 
@@ -108,6 +117,16 @@ class Player:
         self.treasure += 1
         print(f"Вы нашли {self.treasure} сокровищ!")
 
+# Обработчик сообщений бота
+def handle_message(message):  
+    bot.send_message(message.chat.id, 
+                         "Добро пожаловать в игру 'Тени Заброшенного Замка'! Выберите 'Начать игру'")
+    if message.text in ["Начать игру", "Начать"]:
+        game = Game()
+        game.play()
+        bot.send_message(message.chat.id, "Игра окончена! Вы вернулись в деревню.")
+    else:
+        bot.send_message(message.chat.id, "Неизвестный выбор. Попробуйте снова.")
 
 
 # ---------------------------------------------------------------------
@@ -137,12 +156,7 @@ print('Завершение. Инициализация Flask и бота')
 @bot.message_handler(commands=["start"])                        # Обработчик команды /start
 def handle_start(message: types.Message) -> None:
     bot.reply_to(message, "Привет!")                      
-    game = Game()
-    game.play()
-    if game.player.treasure > 0:
-        print(f"\nПоздравляем! Вы герой с {game.player.treasure} сокровищами!")
-    else:
-        game.game_over()
+    handle_message()
 
 @bot.message_handler(commands=["save"])
 def handle_save(message: telebot.types.Message) -> None:

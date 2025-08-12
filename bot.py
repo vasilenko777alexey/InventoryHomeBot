@@ -156,7 +156,7 @@ print('Завершение. Инициализация Flask и бота')
 @bot.message_handler(commands=["start"])                        # Обработчик команды /start
 def handle_start(message: types.Message) -> None:
     bot.reply_to(message, "Привет!")                      
-    handle_message()
+    handle_message(message)
 
 @bot.message_handler(commands=["save"])
 def handle_save(message: telebot.types.Message) -> None:

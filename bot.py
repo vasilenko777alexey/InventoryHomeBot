@@ -121,12 +121,11 @@ class Player:
 def handle_message(message):  
     bot.send_message(message.chat.id, 
                          "Добро пожаловать в игру 'Тени Заброшенного Замка'! Выберите 'Начать игру'")
-    if message.text in ["Начать игру", "Начать"]:
-        game = Game()
-        game.play()
-        bot.send_message(message.chat.id, "Игра окончена! Вы вернулись в деревню.")
-    else:
-        bot.send_message(message.chat.id, "Неизвестный выбор. Попробуйте снова.")
+    
+    game = Game()
+    game.play()
+    bot.send_message(message.chat.id, "Игра окончена! Вы вернулись в деревню.")
+    
 
 
 # ---------------------------------------------------------------------

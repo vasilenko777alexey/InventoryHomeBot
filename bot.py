@@ -29,6 +29,8 @@ from PIL import Image as PILImage  # Библиотека Pillow для рабо
 import threading
 import requests
 
+import random
+
 print('--> Запуск бота...') 
 
 # ---------------------------------------------------------------------
@@ -58,6 +60,55 @@ SELF_PING_ENABLED = os.environ.get("SELF_PING", "1") == "1"
 
 log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 logging.basicConfig(format=log_fmt, level=logging.INFO)
+# ---------------------------------------------------------------------
+# Описание классов
+# ---------------------------------------------------------------------
+class Game:
+    def __init__(self):
+        self.player = Player("Игрок")
+        self.current_location = "Деревня"
+        self.locations = {
+            "Деревня": {"desc": "Вы в деревне. На горизонте виднеется зловещий замок.", 
+                       "choices": ["Пойти к замку"]},
+            "Лес": {"desc": "Густой и мрачный лес. Вы слышите странные звуки.", 
+                       "choices": ["Идти дальше", "Вернуться в деревню"]},
+            "Замок": {"desc": "Вы в замке. Перед вами длинный коридор.", 
+                       "choices": ["Исследовать коридор", "Вернуться в лес"]}
+        }
+        
+    def play(self):
+        while self.current_location != "Конец":
+            print(f"\nВы находитесь в {self.current_location}:\n{self.locations[self.current_location]['desc']}")
+            for i, choice in enumerate(self.locations[self.current_location]['choices']):
+                print(f"{i + 1}. {choice}")
+                
+            choice = int(input("Ваш выбор (1-{})? ".format(len(self.locations[self.current_location]['choices'])))) - 1
+            
+            if choice == 0:
+                self.current_location = self.locations[self.current_location]['choices'][choice]
+            else:
+                self.current_location = "Деревня"
+                
+            if self.current_location == "Замок":
+                print("Вы находите сундук! Открыть? (да/нет)")
+                if input().lower() == "да":
+                    self.player.find_treasure()
+                    print("Вы нашли сокровище!")
+
+    def game_over(self):
+        print("Игра окончена! Вы вернулись в деревню.")
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.health = 10
+        self.treasure = 0
+
+    def find_treasure(self):
+        self.treasure += 1
+        print(f"Вы нашли {self.treasure} сокровищ!")
+
+
 
 # ---------------------------------------------------------------------
 # Инициализация Flask и бота
@@ -85,7 +136,13 @@ print('Завершение. Инициализация Flask и бота')
 
 @bot.message_handler(commands=["start"])                        # Обработчик команды /start
 def handle_start(message: types.Message) -> None:
-    bot.reply_to(message, "Привет!")                      # Асинхронный ответ
+    bot.reply_to(message, "Привет!")                      
+    game = Game()
+    game.play()
+    if game.player.treasure > 0:
+        print(f"\nПоздравляем! Вы герой с {game.player.treasure} сокровищами!")
+    else:
+        game.game_over()
 
 @bot.message_handler(commands=["save"])
 def handle_save(message: telebot.types.Message) -> None:

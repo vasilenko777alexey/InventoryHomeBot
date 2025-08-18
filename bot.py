@@ -10,7 +10,7 @@ from aiohttp import web  # Лёгкий асинхронный веб-серве
 import aiohttp  # HTTP-клиент для самопинга
 
 from telegram import Update  # Тип апдейта Telegram
-from telegram.ext import Application, CommandHandler, ContextTypes  # Ядро PTB v20
+from telegram.ext import Application, Updater, CommandHandler, ContextTypes  # Ядро PTB v20
 
 # -------------------------- БАЗОВЫЕ НАСТРОЙКИ --------------------------
 

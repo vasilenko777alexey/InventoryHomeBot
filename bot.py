@@ -87,7 +87,7 @@ async def main() -> None:  # Главная асинхронная функци�
     await start_aiohttp_server()  # Поднимаем health-сервер
 
     # 2) Создаём приложение Telegram-бота (PTB v20+)
-    application = Application.builder().token(TELEGRAM_TOKEN).build()  # Строим Application
+    application = Application.builder().token(TELEGRAM_TOKEN).updater(None).write_timeout(30).read_timeout(30).build()  # Строим Application
 
     # 3) Регистрируем хэндлеры команд
     application.add_handler(CommandHandler("start", start_command))  # Вешаем обработчик для /start

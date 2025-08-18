@@ -55,8 +55,8 @@ async def main():
     
     # Запускаем приложение
     await app.initialize()
-    await app.updater.start_webhook(listen="0.0.0.0", port=int(os.getenv("PORT", "8443")), url_path=os.getenv("TELEGRAM_BOT_TOKEN"))
-    await app.updater.bot.set_webhook(f"https://{os.getenv('EXTERNAL_URL')}/{os.getenv('TELEGRAM_BOT_TOKEN')}")
+    await app.updater.start_webhook(listen="0.0.0.0", port=int(os.getenv("PORT", "10000")), url_path=os.getenv("TELEGRAM_TOKEN"))
+    await app.updater.bot.set_webhook(f"https://{os.getenv('EXTERNAL_URL')}/{os.getenv('TELEGRAM_TOKEN')}")
     await app.start()
 
 # Функция для запуска фейкового сервера в отдельном потоке

@@ -5,7 +5,7 @@ from telegram import Update  # Для обработки обновлений
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes  # Для бота
 
 # Получаем токен бота из переменной окружения
-TOKEN = os.getenv("BOT_TOKEN")  # В настройках Render добавьте переменную окружения BOT_TOKEN
+TOKEN = os.getenv("TELEGRAM_TOKEN")  # В настройках Render добавьте переменную окружения BOT_TOKEN
 
 # Получаем порт для сервера (обычно Render использует PORT)
 PORT = int(os.getenv("PORT", "8080"))  # Значение по умолчанию — 8080

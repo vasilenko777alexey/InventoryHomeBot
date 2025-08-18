@@ -1,5 +1,5 @@
 # Импортируем необходимые библиотеки
-import os
+import os, asyncio
 import logging
 import time
 import threading

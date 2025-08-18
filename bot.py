@@ -45,7 +45,7 @@ async def setup_webhook(app: Application):
 # Основная функция для запуска бота
 async def main():
     # Создаем приложение Telegram
-    app = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).build()
+    app = Application.builder().token(os.getenv("TELEGRAM_TOKEN")).build()
     
     # Добавляем обработчик команды /start
     app.add_handler(CommandHandler("start", start))

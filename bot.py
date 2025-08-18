@@ -14,7 +14,7 @@ logging.basicConfig(
 )
 
 # Создаем глобальную переменную для хранения URL вебхука
-WEBHOOK_URL = os.getenv("WEBHOOK_URL")  # URL для вебхука, который будет использоваться для получения обновлений
+WEBHOOK_URL = os.getenv("RENDER_EXTERNAL_URL")  # URL для вебхука, который будет использоваться для получения обновлений
 
 # Функция для создания фейкового HTTP-сервера
 def create_fake_server():

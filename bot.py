@@ -176,8 +176,8 @@ def self_ping_loop():
 
 # Старт фоновых потоков при импортировании модуля (когда процесс поднимается gunicorn-ом)
 #threading.Thread(target=ensure_webhook, daemon=True).start()
-if SELF_PING_ENABLED:
-    threading.Thread(target=self_ping_loop, daemon=True).start()
+#if SELF_PING_ENABLED:
+threading.Thread(target=self_ping_loop, daemon=True).start()
 
 if __name__ == "__main__":
     asyncio.run(main())

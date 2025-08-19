@@ -32,7 +32,7 @@ class Location:
     def __init__(self, name, description):
         self.name = name  # название локации
         self.description = description  # описание локации
-        self.connected_locations = {}  # список соседних локаций
+        self.connections = {}   # список соседних локаций
         self.monster = None  # монстр в локации (может быть None)
         self.items = []  # предметы в локации
 

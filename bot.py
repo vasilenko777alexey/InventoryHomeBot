@@ -160,19 +160,22 @@ def self_ping_loop():
     Примечание: у Render Free Web Services засыпают после ~15 минут без входящего трафика.
     """
     if not BASE_URL:
-        app.logger.warning(
-            "BASE_URL не задан; самопинг отключён (не знаем, куда стучаться)."
-        )
+        print("BASE_URL не задан; самопинг отключён (не знаем, куда стучаться).")
+        #app.logger.warning(
+        #    "BASE_URL не задан; самопинг отключён (не знаем, куда стучаться)."
+        #)
         return
 
 #    ping_url = f"{BASE_URL}/health" #/healthcheck
     ping_url = f"{BASE_URL}/healthcheck" 
-    app.logger.info("Самопинг включён, URL: %s, интервал: %s сек", ping_url, PING_INTERVAL_SECONDS)
+    print("Самопинг включён, URL: %s, интервал: %s сек", ping_url, PING_INTERVAL_SECONDS)
+    #app.logger.info("Самопинг включён, URL: %s, интервал: %s сек", ping_url, PING_INTERVAL_SECONDS)
     while True:
         try:
             requests.get(ping_url, timeout=10)
         except Exception as e:
-            app.logger.warning("Ошибка самопинга: %s", e)
+            print("Ошибка самопинга: %s", e)
+            #app.logger.warning("Ошибка самопинга: %s", e)
         time.sleep(PING_INTERVAL_SECONDS)
 
 

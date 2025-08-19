@@ -3,7 +3,7 @@ from starlette.applications import Starlette
 from starlette.responses import Response, PlainTextResponse
 from starlette.requests import Request
 from starlette.routing import Route
-from telegram import Update, InputFile, InputMediaDocument
+from telegram import Update, InputFile, InputMediaDocument, ReplyKeyboardMarkup
 from telegram.ext import Application, ContextTypes, MessageHandler, Updater, CommandHandler, CallbackContext, filters, ContextTypes, ApplicationBuilder
 
 import threading
@@ -92,6 +92,13 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     description = game.get_description()
     await update.message.reply_text(description)
+    
+    # Создаем клавиатуру из доступных направлений (выходов)
+    room_exits = list(game.rooms[game.current_room]['exits'].keys())    
+    keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
+    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
+    await update.message.reply_text(description, reply_markup=reply_markup)
+    
 
 # Обработчик команды /go <направление>
 async def go(update: Update, context: ContextTypes.DEFAULT_TYPE):

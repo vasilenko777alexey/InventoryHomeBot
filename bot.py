@@ -1,71 +1,151 @@
-import os
-import asyncio
-from aiohttp import web, ClientSession
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
-import logging
+import os, asyncio, logging, uvicorn, telebot, openpyxl, io
+from starlette.applications import Starlette
+from starlette.responses import Response, PlainTextResponse
+from starlette.requests import Request
+from starlette.routing import Route
+from telegram import Update, InputFile, InputMediaDocument
+from telegram.ext import Application, ContextTypes, MessageHandler, Updater, CommandHandler, CallbackContext, filters, ContextTypes, ApplicationBuilder
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
+print('Запуск бота...') 
 
-TOKEN = os.getenv("TELEGRAM_TOKEN")
-TARGET_URL = os.getenv("RENDER_EXTERNAL_URL")
-PORT = int(os.getenv("PORT", "8080"))
+TOKEN = os.environ["TELEGRAM_TOKEN"]
+URL   = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам
+print("URL   = os.environ[RENDER_EXTERNAL_URL]")
+print(os.environ["RENDER_EXTERNAL_URL"])
+PORT  = int(os.getenv("PORT", 10000))          # Render слушает этот PORT
 
-chat_id = None  # глобальная переменная для хранения chat_id
+log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+logging.basicConfig(format=log_fmt, level=logging.INFO)
 
-# Обработчик команды /start
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global chat_id
-    chat_id = update.effective_chat.id  # получаем chat_id из сообщения
-    await update.message.reply_text('Привет!')  # отправляем ответ
+# --- хендлеры --------------------------------------------------------------
 
-# HTTP обработчик для Render (чтобы не засыпать)
-async def handle(request):
-    return web.Response(text="OK")
+async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    #await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.message_id) + " " + str(update.message.reply_to_message))
+    await update.message.reply_text(update.message.text )
+async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.message_id) + " " + str(update.message.reply_to_message))
+    
+async def start(update: Update, context: CallbackContext) -> None:
+    await update.message.reply_text("Здравствуйте. Я бот. ")
 
-# Запуск фейкового сервера
-async def start_web_server():
-    app = web.Application()
-    app.router.add_get('/', handle)
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = web.TCPSite(runner, '0.0.0.0', PORT)
-    await site.start()
+async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Начало обработки excel файла")
+    
+    chat_id = update.effective_chat.id
 
-# Периодический GET-запрос каждые 10 минут
-async def periodic_get_request():
-    global chat_id
-    async with ClientSession() as session:
-        while True:
-            if chat_id is not None:
-                try:
-                    await asyncio.sleep(600)  # ждем 10 минут
-                    async with session.get(TARGET_URL) as response:
-                        status = response.status
-                        logging.info(f"GET {TARGET_URL} вернул статус {status}")
-                except Exception as e:
-                    logging.error(f"Ошибка при GET-запросе: {e}")
-            else:
-                await asyncio.sleep(10)  # если chat_id еще не получен, ждем немного
+    # Ищем в старых сообщениях файла Excel
+    # Получим последние 50 сообщений (можно больше или меньше)
+
+    message_id = 9
+   
+    message_to_copy = await context.bot.forward_message(chat_id, chat_id, message_id)
+    if message_to_copy.text:
+        await update.message.reply_text(text=message_to_copy.text)
+    
+    await update.message.reply_text("Этап 1 обработки excel файла")
+
+    if message_to_copy.document:
+    #if message_to_copy.text:
+        await context.bot.send_document(chat_id=chat_id, document=message_to_copy.document.file_id)
+        text="Документ id: " + str(message_to_copy.document.file_id)
+        await context.bot.send_message(chat_id=chat_id, text=text)
+        file = await message_to_copy.document.get_file()
+        TEMP_FILE_PATH = 'temp_excel.xlsx'
+        await file.download_to_drive(TEMP_FILE_PATH)
+
+         # Открываем Excel и меняем ячейки A1 -> A2
+        wb = openpyxl.load_workbook(TEMP_FILE_PATH)
+        ws = wb.active
+
+        cell_a1_value = ws['A1'].value
+        ws['A2'].value = cell_a1_value
+
+        # Сохраняем изменения в тот же файл
+        wb.save(TEMP_FILE_PATH)
+
+        # Создаём InputFile для нового файла
+        #new_file = InputFile(open(TEMP_FILE_PATH, 'rb'))
+        
+        await update.message.reply_text("Этап 2 обработки excel файла")
+        await update.message.reply_text(TEMP_FILE_PATH)
+        # Открываем файл для передачи в InputMediaDocument
+        #with open(TEMP_FILE_PATH, 'rb') as f:
+        #    new_file = InputFile(f)
+
+            # Заменяем сообщение с файлом
+        #   await context.bot.edit_message_media(
+        #       chat_id=chat_id,
+        #       message_id=message_id,
+        #       media=InputMediaDocument(media=new_file)
+        #   )
+            
+        with open(TEMP_FILE_PATH, "rb") as file:  
+            media = InputMediaDocument(file)  
+            message_id_2 = 351
+            await context.bot.edit_message_media(chat_id=chat_id, message_id=message_id_2, media=media)  
+
+        await update.message.reply_text("Файл успешно обновлён.")
+
+
+        
+        # Отправляем сообщение с содержимым A1
+        await update.message.reply_text(f"Значение ячейки A1: {cell_a1_value}")
+
+        # Отправляем обновлённый файл  
+        #await context.bot.send_document(
+        #    chat_id=chat_id,
+        #    document=new_file,
+        #    filename='обновленный_файл.xlsx'
+        #)
+        await update.message.reply_text("Этап 3 обработки excel файла")
+        
+        #await context.bot.edit_message_media(
+        #        chat_id=chat_id,
+        #        message_id=message_id,
+        #        media=InputMediaDocument(media=new_file)
+        #    )
+        await update.message.reply_text("Конец обработки excel файла")
+            
+      
+
+'''
+    excel_file_bytes = None
+'''
+#-------------------------------------------------------------------
 
 async def main():
-    # Запускаем сервер для Render
-    await start_web_server()
+    app = Application.builder().token(TOKEN).updater(None).write_timeout(30).read_timeout(30).build()
+    
+    #app.add_handler(MessageHandler(filters.ALL, echo)) # Обработчик всех текстовых сообщений, кроме команд
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND) & (~filters.REPLY), echo)) # Обработчик всех текстовых сообщений, кроме команд
+    app.add_handler(MessageHandler(filters.REPLY & (~filters.COMMAND), def_reply)) # Обработчик всех текстовых сообщений, кроме команд
+    
+    #app.add_handler(MessageHandler(def_text, content_types=['text']))
+    app.add_handler(CommandHandler('start', start)) 
+    app.add_handler(CommandHandler('excel', excel)) 
+    await app.bot.set_webhook(f"{URL}/telegram", allowed_updates=Update.ALL_TYPES)
+    print("await app.bot.set_webhook(f{URL}/telegram, allowed_updates=Update.ALL_TYPES)")
+    print(f"{URL}/telegram")
 
-    # Создаем Application с токеном
-    application = Application.builder().token(TOKEN).build()
+    async def telegram(request: Request) -> Response:
+        await app.update_queue.put(Update.de_json(await request.json(), app.bot))
+        return Response()
 
-    # Регистрируем обработчик /start
-    application.add_handler(CommandHandler('start', start_command))
+    async def health(_: Request) -> PlainTextResponse:
+        return PlainTextResponse("ok")
 
-    # Запускаем задачу периодического GET-запроса в фоне
-    asyncio.create_task(periodic_get_request())
+    starlette = Starlette(routes=[
+        Route("/telegram", telegram, methods=["POST"]),
+        Route("/healthcheck", health, methods=["GET"]),
+    ])
 
-    # Запускаем бота (бесконечно)
-    await application.run_polling()
+    server = uvicorn.Server(
+        uvicorn.Config(app=starlette, host="0.0.0.0", port=PORT, use_colors=False)
+    )
+    async with app:
+        await app.start()
+        await server.serve()
+        await app.stop()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(main())

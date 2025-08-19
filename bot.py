@@ -8,6 +8,7 @@ from telegram.ext import Application, ContextTypes, MessageHandler, Updater, Com
 
 import threading
 import requests
+import time  # Небольшая пауза перед установкой webhook (устойчивее при рестартах)
 
 print('Запуск бота...') 
 

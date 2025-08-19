@@ -71,8 +71,20 @@ async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     #await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.message_id) + " " + str(update.message.reply_to_message))
     await update.message.reply_text(update.message.text )
 async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.message_id) + " " + str(update.message.reply_to_message))
-    
+    text = update.message.text
+    if text == 'test':
+        await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.message_id) + " " + str(update.message.reply_to_message))
+    elif text == 'north':
+        #direction = context.args[0].lower()
+        direction = 'north'
+        moved = game.move(direction)
+        
+        if moved:
+            description = game.get_description()
+            await update.message.reply_text(description)
+        else:
+            await update.message.reply_text("Нельзя пройти в этом направлении.")
+
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здравствуйте. Я бот. ")
 

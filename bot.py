@@ -82,16 +82,6 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     if not game:
         await update.message.reply_text("Пожалуйста, начните игру командой /start.")
         return
-
-     {'⬆️ north': 'hall'}
-            },
-            'hall': {
-                'description': 'В большой зале с разбросанными стульями.',
-                'exits': {'⬇️ south': 'entrance', '➡️ east': 'kitchen'}
-            },
-            'kitchen': {
-                'description': 'На кухне стоит старый холодильник.',
-                'exits': {'⬅️ west': 'hall'}
         
     if text == '⬆️ north' or text == '⬇️ south' or text == '➡️ east' or text == '⬅️ west' :
         #direction = context.args[0].lower()

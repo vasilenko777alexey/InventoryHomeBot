@@ -11,7 +11,6 @@ import requests
 import time  # Небольшая пауза перед установкой webhook (устойчивее при рестартах)
 
 print('Запуск бота...') 
-logging.info('Запуск бота...')
 
 TOKEN = os.environ["TELEGRAM_TOKEN"]
 URL   = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам
@@ -24,6 +23,8 @@ PORT  = int(os.getenv("PORT", 10000))          # Render слушает этот 
 log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 logging.basicConfig(format=log_fmt, level=logging.INFO)
 
+logging.info(' logging.info Запуск бота...')
+
 # --- хендлеры --------------------------------------------------------------
 
 async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
@@ -33,6 +34,9 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.message_id) + " " + str(update.message.reply_to_message))
     
 async def start(update: Update, context: CallbackContext) -> None:
+    await update.message.reply_text("Здравствуйте. Я бот. ")
+
+async def game(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здравствуйте. Я бот. ")
 
 async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -129,6 +133,7 @@ async def main():
     
     #app.add_handler(MessageHandler(def_text, content_types=['text']))
     app.add_handler(CommandHandler('start', start)) 
+    app.add_handler(CommandHandler('game', game)) 
     app.add_handler(CommandHandler('excel', excel)) 
     await app.bot.set_webhook(f"{URL}/telegram", allowed_updates=Update.ALL_TYPES)
     print("await app.bot.set_webhook(f{URL}/telegram, allowed_updates=Update.ALL_TYPES)")
@@ -154,6 +159,8 @@ async def main():
         await app.start()
         await server.serve()
         await app.stop()
+
+#-------------------------------------------------------------------
         
 def self_ping_loop():
     """

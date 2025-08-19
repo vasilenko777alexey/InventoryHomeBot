@@ -11,6 +11,7 @@ import requests
 import time  # Небольшая пауза перед установкой webhook (устойчивее при рестартах)
 
 print('Запуск бота...') 
+logging.info('Запуск бота...')
 
 TOKEN = os.environ["TELEGRAM_TOKEN"]
 URL   = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам

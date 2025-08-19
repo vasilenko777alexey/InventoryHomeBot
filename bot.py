@@ -85,7 +85,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         
     if text == '⬆️ north' or text == '⬇️ south' or text == '➡️ east' or text == '⬅️ west' :
         #direction = context.args[0].lower()
-        direction = 'north'
+        direction = text
         moved = game.move(direction)
         
         if moved:

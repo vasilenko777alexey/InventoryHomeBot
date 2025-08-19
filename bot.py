@@ -171,7 +171,7 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     description = game.get_description()
     location = game.current_location
     location_desc = game.current_location.description
-    await update.message.reply_text(location)
+    #await update.message.reply_text(location)
     await update.message.reply_text(location_desc)
     
     # Создаем клавиатуру из доступных направлений (выходов)

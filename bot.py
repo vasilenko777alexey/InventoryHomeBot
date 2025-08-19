@@ -87,16 +87,16 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         #direction = context.args[0].lower()
         direction = text
         moved = game.move(direction)
-
-        # Создаем клавиатуру из доступных направлений (выходов)
-        room_exits = list(game.rooms[game.current_room]['exits'].keys())    
-        keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
-        reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
-        await update.message.reply_text(description, reply_markup=reply_markup)
         
         if moved:
             description = game.get_description()
-            await update.message.reply_text(description)
+            #await update.message.reply_text(description)
+            
+            # Создаем клавиатуру из доступных направлений (выходов)
+            room_exits = list(game.rooms[game.current_room]['exits'].keys())    
+            keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
+            reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
+            await update.message.reply_text(description, reply_markup=reply_markup)
         else:
             await update.message.reply_text("Нельзя пройти в этом направлении.")
 
@@ -108,14 +108,14 @@ async def game(update: Update, context: CallbackContext) -> None:
     # Создаем новую игру для пользователя или сбрасываем текущую
     user_games[user_id] = Game()
     await update.message.reply_text("Добро пожаловать в текстовую бродилку!\n" +
-                                    "Используйте команды /look и /go <направление>.")
+                                    "Используйте команды /look.")
     
 # Обработчик команды /look — описание текущей комнаты
 async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     game = user_games.get(user_id)
     if not game:
-        await update.message.reply_text("Пожалуйста, начните игру командой /start.")
+        await update.message.reply_text("Пожалуйста, начните игру командой /game.")
         return
     description = game.get_description()
     #await update.message.reply_text(description)

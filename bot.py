@@ -6,6 +6,9 @@ from starlette.routing import Route
 from telegram import Update, InputFile, InputMediaDocument
 from telegram.ext import Application, ContextTypes, MessageHandler, Updater, CommandHandler, CallbackContext, filters, ContextTypes, ApplicationBuilder
 
+import threading
+import requests
+
 print('Запуск бота...') 
 
 TOKEN = os.environ["TELEGRAM_TOKEN"]
@@ -137,6 +140,7 @@ async def main():
     starlette = Starlette(routes=[
         Route("/telegram", telegram, methods=["POST"]),
         Route("/healthcheck", health, methods=["GET"]),
+#        Route("/health", health, methods=["GET"]),
     ])
 
     server = uvicorn.Server(
@@ -146,6 +150,33 @@ async def main():
         await app.start()
         await server.serve()
         await app.stop()
+        
+def self_ping_loop():
+    """
+    Периодически пингует /health через внешний URL.
+    Это создаёт входящий HTTP-трафик и предотвращает автоусыпление на Free плане.
+    Примечание: у Render Free Web Services засыпают после ~15 минут без входящего трафика.
+    """
+    if not BASE_URL:
+        app.logger.warning(
+            "BASE_URL не задан; самопинг отключён (не знаем, куда стучаться)."
+        )
+        return
+
+    ping_url = f"{BASE_URL}/health"
+    app.logger.info("Самопинг включён, URL: %s, интервал: %s сек", ping_url, PING_INTERVAL_SECONDS)
+    while True:
+        try:
+            requests.get(ping_url, timeout=10)
+        except Exception as e:
+            app.logger.warning("Ошибка самопинга: %s", e)
+        time.sleep(PING_INTERVAL_SECONDS)
+
+
+# Старт фоновых потоков при импортировании модуля (когда процесс поднимается gunicorn-ом)
+threading.Thread(target=ensure_webhook, daemon=True).start()
+if SELF_PING_ENABLED:
+    threading.Thread(target=self_ping_loop, daemon=True).start()
 
 if __name__ == "__main__":
     asyncio.run(main())

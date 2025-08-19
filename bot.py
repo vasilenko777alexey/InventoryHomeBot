@@ -163,7 +163,8 @@ def self_ping_loop():
         )
         return
 
-    ping_url = f"{BASE_URL}/health"
+#    ping_url = f"{BASE_URL}/health" #/healthcheck
+    ping_url = f"{BASE_URL}/healthcheck" 
     app.logger.info("Самопинг включён, URL: %s, интервал: %s сек", ping_url, PING_INTERVAL_SECONDS)
     while True:
         try:
@@ -174,7 +175,7 @@ def self_ping_loop():
 
 
 # Старт фоновых потоков при импортировании модуля (когда процесс поднимается gunicorn-ом)
-threading.Thread(target=ensure_webhook, daemon=True).start()
+#threading.Thread(target=ensure_webhook, daemon=True).start()
 if SELF_PING_ENABLED:
     threading.Thread(target=self_ping_loop, daemon=True).start()
 

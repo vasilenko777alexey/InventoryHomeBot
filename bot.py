@@ -91,13 +91,13 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Пожалуйста, начните игру командой /start.")
         return
     description = game.get_description()
-    await update.message.reply_text(description)
+    #await update.message.reply_text(description)
     
     # Создаем клавиатуру из доступных направлений (выходов)
     room_exits = list(game.rooms[game.current_room]['exits'].keys())    
     keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
-    await update.message.reply_text(description, reply_markup=reply_markup)
+    await update.message.reply_text(room_exits, reply_markup=reply_markup)
     
 
 # Обработчик команды /go <направление>

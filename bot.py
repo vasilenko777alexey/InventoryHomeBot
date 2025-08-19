@@ -104,7 +104,7 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 [KeyboardButton(text='Button 3'), KeyboardButton(text='Button 4')]
             ])
     #bot.sendMessage(chat_id, 'Choose an option:', reply_markup=keyboard)
-    await update.message.reply_text('Choose an option:', reply_markup=keyboard)
+    await update.message.reply_text(room_exits, reply_markup=keyboard)
     #await context.bot.send_message(chat_id=chat_id, 'Choose an option:', reply_markup=keyboard)
     
 

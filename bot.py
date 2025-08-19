@@ -71,10 +71,19 @@ async def echo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     #await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.message_id) + " " + str(update.message.reply_to_message))
     await update.message.reply_text(update.message.text )
 async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
-    text = update.message.text
+    text = update.message.text    
+    
     if text == 'test':
         await update.message.reply_text(update.message.text + " , id message: "+ str(update.message.id) + " " + str(update.message.reply_to_message.message_id) + " " + str(update.message.reply_to_message))
-    elif text == 'north':
+        return
+
+    user_id = update.effective_user.id
+    game = user_games.get(user_id)
+    if not game:
+        await update.message.reply_text("Пожалуйста, начните игру командой /start.")
+        return
+        
+    if text == 'north':
         #direction = context.args[0].lower()
         direction = 'north'
         moved = game.move(direction)
@@ -109,7 +118,7 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     room_exits = list(game.rooms[game.current_room]['exits'].keys())    
     keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
-    await update.message.reply_text(room_exits, reply_markup=reply_markup)
+    await update.message.reply_text(description, reply_markup=reply_markup)
 
     #keyboard = ReplyKeyboardMarkup(keyboard=[
     #            ['Button 1', 'Button 2'],

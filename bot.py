@@ -1,4 +1,4 @@
-import os, asyncio, logging, uvicorn, telebot, openpyxl, io
+import os, asyncio, logging, uvicorn, telebot, openpyxl, io, random
 from starlette.applications import Starlette
 from starlette.responses import Response, PlainTextResponse
 from starlette.requests import Request
@@ -23,7 +23,47 @@ PORT  = int(os.getenv("PORT", 10000))          # Render слушает этот 
 log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 logging.basicConfig(format=log_fmt, level=logging.INFO)
 
-logging.info(' logging.info Запуск бота...')
+#logging.info(' logging.info Запуск бота...')
+
+# --- классы --------------------------------------------------------------
+
+# Класс Game — управляет состоянием игры для каждого пользователя
+class Game:
+    def __init__(self):
+        # Определяем комнаты (простая карта)
+        self.rooms = {
+            'entrance': {
+                'description': 'Вы на входе в старый заброшенный дом.',
+                'exits': {'north': 'hall'}
+            },
+            'hall': {
+                'description': 'В большой зале с разбросанными стульями.',
+                'exits': {'south': 'entrance', 'east': 'kitchen'}
+            },
+            'kitchen': {
+                'description': 'На кухне стоит старый холодильник.',
+                'exits': {'west': 'hall'}
+            }
+        }
+        self.current_room = 'entrance'  # начальная комната
+
+    def get_description(self):
+        room = self.rooms[self.current_room]
+        desc = room['description']
+        exits = ', '.join(room['exits'].keys())
+        return f"{desc}\nДоступные направления: {exits}"
+
+    def move(self, direction):
+        room = self.rooms[self.current_room]
+        if direction in room['exits']:
+            self.current_room = room['exits'][direction]
+            return True
+        else:
+            return False
+
+# Хранение игр для каждого пользователя
+user_games = {}
+
 
 # --- хендлеры --------------------------------------------------------------
 
@@ -37,7 +77,44 @@ async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здравствуйте. Я бот. ")
 
 async def game(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text("Здравствуйте. Я бот. ")
+    user_id = update.effective_user.id
+    # Создаем новую игру для пользователя или сбрасываем текущую
+    user_games[user_id] = Game()
+    await update.message.reply_text("Добро пожаловать в текстовую бродилку!\n" +
+                                    "Используйте команды /look и /go <направление>.")
+    
+# Обработчик команды /look — описание текущей комнаты
+async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    game = user_games.get(user_id)
+    if not game:
+        await update.message.reply_text("Пожалуйста, начните игру командой /start.")
+        return
+    description = game.get_description()
+    await update.message.reply_text(description)
+
+# Обработчик команды /go <направление>
+async def go(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    game = user_games.get(user_id)
+    if not game:
+        await update.message.reply_text("Пожалуйста, начните игру командой /start.")
+        return
+    
+    if len(context.args) == 0:
+        await update.message.reply_text("Укажите направление. Например: /go north")
+        return
+    
+    direction = context.args[0].lower()
+    moved = game.move(direction)
+    
+    if moved:
+        description = game.get_description()
+        await update.message.reply_text(description)
+    else:
+        await update.message.reply_text("Нельзя пройти в этом направлении.")
+
+    
 
 async def excel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Начало обработки excel файла")
@@ -134,6 +211,8 @@ async def main():
     #app.add_handler(MessageHandler(def_text, content_types=['text']))
     app.add_handler(CommandHandler('start', start)) 
     app.add_handler(CommandHandler('game', game)) 
+    application.add_handler(CommandHandler('look', look))
+    application.add_handler(CommandHandler('go', go))
     app.add_handler(CommandHandler('excel', excel)) 
     await app.bot.set_webhook(f"{URL}/telegram", allowed_updates=Update.ALL_TYPES)
     print("await app.bot.set_webhook(f{URL}/telegram, allowed_updates=Update.ALL_TYPES)")

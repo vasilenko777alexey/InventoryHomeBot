@@ -100,8 +100,8 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #await update.message.reply_text(room_exits, reply_markup=reply_markup)
 
     keyboard = ReplyKeyboardMarkup(keyboard=[
-                [KeyboardButton(text='Button 1'), KeyboardButton(text='Button 2')],
-                [KeyboardButton(text='Button 3'), KeyboardButton(text='Button 4')]
+                ['Button 1', 'Button 2'],
+                ['Button 3', 'Button 4']
             ])
     #bot.sendMessage(chat_id, 'Choose an option:', reply_markup=keyboard)
     await update.message.reply_text(room_exits, reply_markup=keyboard)

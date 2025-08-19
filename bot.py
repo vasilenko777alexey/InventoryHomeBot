@@ -13,6 +13,7 @@ print('Запуск бота...')
 
 TOKEN = os.environ["TELEGRAM_TOKEN"]
 URL   = os.environ["RENDER_EXTERNAL_URL"]     # Render выдаёт значение сам
+BASE_URL = URL
 print("URL   = os.environ[RENDER_EXTERNAL_URL]")
 print(os.environ["RENDER_EXTERNAL_URL"])
 PORT  = int(os.getenv("PORT", 10000))          # Render слушает этот PORT

@@ -94,10 +94,17 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #await update.message.reply_text(description)
     
     # Создаем клавиатуру из доступных направлений (выходов)
-    room_exits = list(game.rooms[game.current_room]['exits'].keys())    
-    keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
-    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
-    await update.message.reply_text(room_exits, reply_markup=reply_markup)
+    #room_exits = list(game.rooms[game.current_room]['exits'].keys())    
+    #keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
+    #reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
+    #await update.message.reply_text(room_exits, reply_markup=reply_markup)
+
+    keyboard = ReplyKeyboardMarkup(keyboard=[
+                [KeyboardButton(text='Button 1'), KeyboardButton(text='Button 2')],
+                [KeyboardButton(text='Button 3'), KeyboardButton(text='Button 4')]
+            ])
+    #bot.sendMessage(chat_id, 'Choose an option:', reply_markup=keyboard)
+    await context.bot.send_message(chat_id=chat_id, 'Choose an option:', reply_markup=keyboard)
     
 
 # Обработчик команды /go <направление>

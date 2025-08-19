@@ -27,9 +27,37 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 # --- классы --------------------------------------------------------------
 
+# Класс Location — место в игре
+class Location:
+    def __init__(self, name, description):
+        self.name = name  # название локации
+        self.description = description  # описание локации
+        self.connected_locations = {}  # список соседних локаций
+        self.monster = None  # монстр в локации (может быть None)
+        self.items = []  # предметы в локации
+
+    def connect(self, other_location, direction):
+        # Создаем двунаправленное соединение по сторонам света
+        # direction - строка типа 'Север', 'Юг', 'Восток', 'Запад'
+        self.connections[direction] = other_location
+        # Обратное направление для другой локации (противоположное)
+        opposite_directions = {
+            'Север': 'Юг',
+            'Юг': 'Север',
+            'Восток': 'Запад',
+            'Запад': 'Восток'
+        }
+        other_location.connections[opposite_directions[direction]] = self
+        
 # Класс Game — управляет состоянием игры для каждого пользователя
 class Game:
     def __init__(self):
+        # Инициализация локаций
+        self.locations = {}
+        self.create_world()
+         # Начальная локация игрока
+        self.current_location = self.locations['Деревня']
+        
         # Определяем комнаты (простая карта)
         self.rooms = {
             'entrance': {
@@ -46,6 +74,29 @@ class Game:
             }
         }
         self.current_room = 'entrance'  # начальная комната
+        
+    def create_world(self):
+        # Создаем локации
+        village = Location('Деревня', 'Маленькая уютная деревня.')
+        forest = Location('Лес', 'Густой лес с высокими деревьями.')
+        mountain_path = Location('Горная тропа', 'Тропа в горы.')
+        
+        # Соединяем локации
+        # Соединяем по сторонам света
+        village.connect(forest, 'Юг')          # Деревня южнее леса
+        forest.connect(mountain_path, 'Восток')  # Лес восточнее горной тропы
+        
+        # Заполняем словарь локаций для доступа по имени
+        self.locations['Деревня'] = village
+        self.locations['Лес'] = forest
+        self.locations['Горная тропа'] = mountain_path
+        
+    def move_to(self,direction):
+        # Перемещение по направлению (если есть)
+        if direction in self.current_location.connections:
+            self.current_location=self.current_location.connections[direction]
+            return True
+        return False
 
     def get_description(self):
         room = self.rooms[self.current_room]
@@ -118,7 +169,10 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Пожалуйста, начните игру командой /game.")
         return
     description = game.get_description()
-    #await update.message.reply_text(description)
+    location = game.current_location
+    location_desc = game.current_location.description
+    await update.message.reply_text(location)
+    await update.message.reply_text(location_desc)
     
     # Создаем клавиатуру из доступных направлений (выходов)
     room_exits = list(game.rooms[game.current_room]['exits'].keys())    

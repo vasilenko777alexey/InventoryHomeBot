@@ -34,15 +34,15 @@ class Game:
         self.rooms = {
             'entrance': {
                 'description': 'Вы на входе в старый заброшенный дом.',
-                'exits': {'north': 'hall'}
+                'exits': {'⬆️ north': 'hall'}
             },
             'hall': {
                 'description': 'В большой зале с разбросанными стульями.',
-                'exits': {'south': 'entrance', 'east': 'kitchen'}
+                'exits': {'⬇️ south': 'entrance', '➡️ east': 'kitchen'}
             },
             'kitchen': {
                 'description': 'На кухне стоит старый холодильник.',
-                'exits': {'west': 'hall'}
+                'exits': {'⬅️ west': 'hall'}
             }
         }
         self.current_room = 'entrance'  # начальная комната

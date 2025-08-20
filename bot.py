@@ -48,7 +48,8 @@ class Location:
             'Север': 'Юг',
             'Юг': 'Север',
             'Восток': 'Запад',
-            'Запад': 'Восток'
+            'Запад': 'Восток',
+            'Дверь': 'Дверь'
         }
         other_location.connections[opposite_directions[direction]] = self
         
@@ -92,8 +93,8 @@ class Game:
         village.connect(forest, 'Юг')          # Деревня южнее леса
         forest.connect(mountain_path, 'Восток')  # Лес восточнее горной тропы
         forest.connect(castle, 'Север')
-        castle.connect(d_castle_hallway)  # Соединение с дверью
-        d_castle_hallway.connect(hallway) # Соединение с дверью
+        castle.connect(d_castle_hallway, 'Дверь')  # Соединение с дверью
+        d_castle_hallway.connect(hallway, 'Дверь') # Соединение с дверью
         
         # Заполняем словарь локаций для доступа по имени
         self.locations['Деревня'] = village

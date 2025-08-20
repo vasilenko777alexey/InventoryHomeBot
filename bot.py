@@ -145,7 +145,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             
             # Создаем клавиатуру из доступных направлений (выходов)
             room_exits = list(game.rooms[game.current_room]['exits'].keys())    
-            keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
+            keyboard = [[direction for direction in room_exits]]  # Каждая кнопка — отдельная строка    
             reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
             await update.message.reply_text(description, reply_markup=reply_markup)
         else:

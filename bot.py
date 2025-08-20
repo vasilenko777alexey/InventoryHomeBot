@@ -192,6 +192,9 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(location_desc)
     connections = list(game.current_location.connections.keys())
     await update.message.reply_text(connections)
+    connections = ', '.join(game.current_location.connections.keys())
+    
+    await update.message.reply_text(connections)
     
     # Создаем клавиатуру из доступных направлений (выходов)
     room_exits = list(game.rooms[game.current_room]['exits'].keys())    

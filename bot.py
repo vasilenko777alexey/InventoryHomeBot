@@ -39,7 +39,7 @@ class Location:
         self.status = status #Статус двери, если тип дверь, открыта/закрыта/сломана - open/lock/broken
         self.key = key #Ключ для двери, если тип дверь, строка - Название ключа
 
-    def connect(self, other_location, direction = None):
+    def connect(self, other_location, direction):
         # Создаем двунаправленное соединение по сторонам света
         # direction - строка типа 'Север'/'Юг'/'Восток'/'Запад'
         self.connections[direction] = other_location

@@ -29,19 +29,22 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 # Класс Location — место в игре
 class Location:
-    def __init__(self, name, description):
+    def __init__(self, name, description, type = 'location', status = None, key = None ):
         self.name = name  # название локации
         self.description = description  # описание локации
         self.connections = {}   # список соседних локаций
         self.monster = None  # монстр в локации (может быть None)
-        self.items = []  # предметы в локации
+        self.items = []      # предметы в локации
+        self.type = type      # тип локации дверь/локация - door/location
+        self.status = status #Статус двери, если тип дверь, открыта/закрыта/сломана - open/lock/broken
+        self.key = key #Ключ для двери, если тип дверь, строка - Название ключа
 
-    def connect(self, other_location, direction):
+    def connect(self, other_location, direction = None):
         # Создаем двунаправленное соединение по сторонам света
-        # direction - строка типа 'Север', 'Юг', 'Восток', 'Запад'
+        # direction - строка типа 'Север'/'Юг'/'Восток'/'Запад'
         self.connections[direction] = other_location
         # Обратное направление для другой локации (противоположное)
-        opposite_directions = {
+        opposite_directions = { #словарь соответствий противоположных направлений
             'Север': 'Юг',
             'Юг': 'Север',
             'Восток': 'Запад',
@@ -77,19 +80,28 @@ class Game:
         
     def create_world(self):
         # Создаем локации
-        village = Location('Деревня', 'Маленькая уютная деревня.')
-        forest = Location('Лес', 'Густой лес с высокими деревьями.')
-        mountain_path = Location('Горная тропа', 'Тропа в горы.')
-        
+        village         = Location('Деревня', 'Маленькая уютная деревня.')
+        forest          = Location('Лес', 'Тёмный дремучий лес.')
+        castle          = Location('Замок', 'Древний заброшенный таинственный замок')
+        d_castle_hallway  = Location('Дверь в замок', 'Массивная дубовая дверь', 'door', 'open' )
+        hallway         = Location('Прихожая замка', 'Вы вошли в прихожую замка')
+        mountain_path   = Location('Горная тропа', 'Тропа в горы.')
+               
         # Соединяем локации
         # Соединяем по сторонам света
         village.connect(forest, 'Юг')          # Деревня южнее леса
         forest.connect(mountain_path, 'Восток')  # Лес восточнее горной тропы
+        forest.connect(castle, 'Север')
+        castle.connect(d_castle_hallway)  # Соединение с дверью
+        d_castle_hallway.connect(hallway) # Соединение с дверью
         
         # Заполняем словарь локаций для доступа по имени
         self.locations['Деревня'] = village
         self.locations['Лес'] = forest
         self.locations['Горная тропа'] = mountain_path
+        self.locations['Замок'] = castle
+        self.locations['Дверь в замок'] = castle_hallway
+        self.locations['Прихожая замка'] = hallway
         
     def move_to(self,direction):
         # Перемещение по направлению (если есть)

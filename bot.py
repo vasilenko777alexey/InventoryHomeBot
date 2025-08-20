@@ -101,7 +101,7 @@ class Game:
         self.locations['Лес'] = forest
         self.locations['Горная тропа'] = mountain_path
         self.locations['Замок'] = castle
-        self.locations['Дверь в замок'] = castle_hallway
+        self.locations['Дверь в замок'] = d_castle_hallway
         self.locations['Прихожая замка'] = hallway
         
     def move_to(self,direction):

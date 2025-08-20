@@ -104,7 +104,7 @@ class Game:
         self.locations['Дверь в замок'] = d_castle_hallway
         self.locations['Прихожая замка'] = hallway
         
-    def move_to(self,direction):
+    def move_to(self, direction):
         # Перемещение по направлению (если есть)
         if direction in self.current_location.connections:
             self.current_location=self.current_location.connections[direction]
@@ -184,11 +184,14 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not game:
         await update.message.reply_text("Пожалуйста, начните игру командой /game.")
         return
+        
     description = game.get_description()
     location = game.current_location
     location_desc = game.current_location.description
     #await update.message.reply_text(location)
     await update.message.reply_text(location_desc)
+    connections = list(game.current_location.connections.keys())
+    await update.message.reply_text(connections)
     
     # Создаем клавиатуру из доступных направлений (выходов)
     room_exits = list(game.rooms[game.current_room]['exits'].keys())    

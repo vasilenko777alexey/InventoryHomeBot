@@ -112,13 +112,13 @@ class Game:
         # Перемещение по направлению (если есть)
         if direction in self.current_location.connections:
             if (self.current_location.connections[direction].type == 'door'
-                and self.current_location.connections[direction].status == 'open'):
-                self.current_location=self.current_location.connections[direction].connections[direction]
-                return True
+                and self.current_location.connections[direction].status == 'open'):                    
+                    self.current_location=self.current_location.connections[direction].connections[direction]
+                    return True
             elif (self.current_location.connections[direction].type == 'door'
                 and self.current_location.connections[direction].status == 'lock'):
                     answer = "Дверь заперта"
-                return False
+                    return False
             else:
                 self.current_location=self.current_location.connections[direction]
                 return True

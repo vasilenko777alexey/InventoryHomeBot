@@ -120,7 +120,7 @@ class Game:
                     return True
             elif (self.current_location.connections[direction].type == 'door'
                 and self.current_location.connections[direction].status == 'lock'):
-                    answer = [self.current_location.connections[direction].key]
+                    answer.append(self.current_location.connections[direction].key)
                     
                     return False
             else:

@@ -202,6 +202,8 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(location_desc, reply_markup=reply_markup)
         else:
             await update.message.reply_text("Нельзя пройти в этом направлении.")
+            await update.message.reply_text(answer)
+            
 #⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦
 
 async def start(update: Update, context: CallbackContext) -> None:

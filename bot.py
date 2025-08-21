@@ -90,8 +90,9 @@ class Game:
                
         # Соединяем локации
         # Соединяем по сторонам света
-        village.connect(forest, 'Север')          # Лес южнее деревни
-        forest.connect(mountain_path, 'Восток')  # Горная тропа восточнее леса
+        village.connect(forest, '⬆️ Север')          # Лес южнее деревни
+        forest.connect(mountain_path, '➡️ Восток')  # Горная тропа восточнее леса
+        #⬇️ ⬅️
         forest.connect(castle, 'Север')
         castle.connect(d_castle_hallway, 'Дверь')  # Соединение с дверью
         d_castle_hallway.connect(hallway, 'Дверь') # Соединение с дверью
@@ -186,22 +187,28 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
         
     description = game.get_description()
+    
     location = game.current_location
     location_desc = game.current_location.description
     #await update.message.reply_text(location)
     await update.message.reply_text(location_desc)
     connections = list(game.current_location.connections.keys())
     await update.message.reply_text(connections)
-    connections = ', '.join(game.current_location.connections.keys())
+    direction = ', '.join(game.current_location.connections.keys())
     
-    await update.message.reply_text(connections)
+    await update.message.reply_text(direction)
+
+    # Создаем клавиатуру из доступных направлений (выходов)
+    connections = list(game.current_location.connections.keys())    
+    keyboard = [[direction] for direction in connections]  # Каждая кнопка — отдельная строка    
+    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
     
     # Создаем клавиатуру из доступных направлений (выходов)
-    room_exits = list(game.rooms[game.current_room]['exits'].keys())    
-    keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
-    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
-    await update.message.reply_text(description, reply_markup=reply_markup)
-    await update.message.reply_text(room_exits)
+    #room_exits = list(game.rooms[game.current_room]['exits'].keys())    
+    #keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
+    #reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
+    #await update.message.reply_text(description, reply_markup=reply_markup)
+    #await update.message.reply_text(room_exits)
 
     #keyboard = ReplyKeyboardMarkup(keyboard=[
     #            ['Button 1', 'Button 2'],

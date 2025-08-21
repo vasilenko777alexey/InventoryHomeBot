@@ -183,7 +183,8 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     if text == '⬆️ Север' or text == '⬇️ Юг' or text == '➡️ Восток' or text == '⬅️ Запад' :
         #direction = context.args[0].lower()
         direction = text
-        moved = game.move_to(direction)
+        answer = ""
+        moved = game.move_to(direction, answer)
         
         if moved:
             location_desc = game.current_location.description                #Получаем описание текущей локации

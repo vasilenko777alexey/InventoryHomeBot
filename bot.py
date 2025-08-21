@@ -81,13 +81,13 @@ class Game:
         
     def create_world(self):
         # Создаем локации
-        village         = Location('Деревня', 'Маленькая уютная деревня.')
+        village          = Location('Деревня', 'Маленькая уютная деревня.')
         fountain         = Location('Целебный Фонтан', 'Фонтан исцеляющий раны.')
-        forest          = Location('Лес', 'Тёмный дремучий лес.')
-        castle          = Location('Замок', 'Древний заброшенный таинственный замок')
-        d_castle_hallway  = Location('Дверь в замок', 'Массивная дубовая дверь', 'door', 'open' )
-        hallway         = Location('Прихожая замка', 'Вы вошли в прихожую замка')
-        mountain_path   = Location('Горная тропа', 'Тропа в горы.')
+        forest           = Location('Лес', 'Тёмный дремучий лес.')
+        castle_entry     = Location('Вход в замок', 'Вы перед древним заброшенным таинственным замком')
+        d_castle_hallway = Location('Дверь: замок-прихожая', 'Массивная дубовая дверь', 'door', 'open' )
+        hallway          = Location('Прихожая замка', 'Вы вошли в прихожую замка')
+        mountain_path    = Location('Горная тропа', 'Тропа в горы.')
                
         # Соединяем локации
         # Соединяем по сторонам света
@@ -95,7 +95,7 @@ class Game:
         village.connect(fountain, '➡️ Восток')       # на востоке фонтан
         forest.connect(mountain_path, '➡️ Восток')  # Горная тропа восточнее леса
         #⬇️ ⬅️
-        forest.connect(castle, '⬆️ Север')
+        forest.connect(castle_entry, '⬆️ Север')
         castle.connect(d_castle_hallway, '⬆️ Север')  # Соединение с дверью
         d_castle_hallway.connect(hallway, '⬆️ Север') # Соединение с дверью
         
@@ -104,15 +104,25 @@ class Game:
         self.locations['Целебный Фонтан'] = fountain
         self.locations['Лес'] = forest
         self.locations['Горная тропа'] = mountain_path
-        self.locations['Замок'] = castle
-        self.locations['Дверь в замок'] = d_castle_hallway
+        self.locations['Вход в замок'] = castle_entry
+        self.locations['Дверь: замок-прихожая'] = d_castle_hallway
         self.locations['Прихожая замка'] = hallway
         
-    def move_to(self, direction):
+    def move_to(self, direction, answer):
         # Перемещение по направлению (если есть)
         if direction in self.current_location.connections:
-            self.current_location=self.current_location.connections[direction]
-            return True
+            if self.current_location=self.current_location.connections[direction].type == 'door'
+                and self.current_location=self.current_location.connections[direction].status == 'open':
+                self.current_location=self.current_location.connections[direction].connections[direction]
+                return True
+            elif
+                self.current_location=self.current_location.connections[direction].type == 'door'
+                and self.current_location=self.current_location.connections[direction].status == 'lock':
+                    answer = "Дверь заперта"
+                return False
+            else:
+                self.current_location=self.current_location.connections[direction]
+                return True
         return False
 
     def get_description(self):
@@ -154,7 +164,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     if text == '⬆️ north' or text == '⬇️ south' or text == '➡️ east' or text == '⬅️ west' :
         #direction = context.args[0].lower()
         direction = text
-        moved = game.move(direction)
+        moved = game.move(dirjnection)
         
         if moved:
             description = game.get_description()

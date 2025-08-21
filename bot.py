@@ -90,8 +90,8 @@ class Game:
                
         # Соединяем локации
         # Соединяем по сторонам света
-        village.connect(forest, 'Юг')          # Деревня южнее леса
-        forest.connect(mountain_path, 'Восток')  # Лес восточнее горной тропы
+        village.connect(forest, 'Север')          # Лес южнее деревни
+        forest.connect(mountain_path, 'Восток')  # Горная тропа восточнее леса
         forest.connect(castle, 'Север')
         castle.connect(d_castle_hallway, 'Дверь')  # Соединение с дверью
         d_castle_hallway.connect(hallway, 'Дверь') # Соединение с дверью

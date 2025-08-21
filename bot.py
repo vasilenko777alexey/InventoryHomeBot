@@ -88,6 +88,7 @@ class Game:
         d_castle_hallway = Location('Дверь: замок-прихожая', 'Массивная дубовая дверь', 'door', 'open' )
         hallway          = Location('Прихожая замка', 'Вы вошли в прихожую замка')
         mountain_path    = Location('Горная тропа', 'Тропа в горы.')
+        d_hallway_dungeon = Location('Дверь: прихожая-подземелье', 'Массивная дубовая дверь', 'door', 'lock', 'Старый ржавый ключ' )
                
         # Соединяем локации
         # Соединяем по сторонам света
@@ -117,7 +118,8 @@ class Game:
                     return True
             elif (self.current_location.connections[direction].type == 'door'
                 and self.current_location.connections[direction].status == 'lock'):
-                    answer = "Дверь заперта"
+                    key = self.current_location.connections[direction].key
+                    answer = "Дверь заперта. Чтобы открыть нужен:" + key
                     return False
             else:
                 self.current_location=self.current_location.connections[direction]

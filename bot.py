@@ -169,6 +169,25 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(description, reply_markup=reply_markup)
         else:
             await update.message.reply_text("Нельзя пройти в этом направлении.")
+            
+    if text == '⬆️ north' or text == '⬇️ south' or text == '➡️ east' or text == '⬅️ west' :
+        #direction = context.args[0].lower()
+        direction = text
+        moved = game.move(direction)
+        
+        if moved:
+            description = game.get_description()
+            #await update.message.reply_text(description)
+            
+            # Создаем клавиатуру из доступных направлений (выходов)
+            room_exits = list(game.rooms[game.current_room]['exits'].keys())  
+            #keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка 
+            keyboard = [[direction for direction in room_exits],
+                       ['🖐 Взять', '👁 Смот','🎒 Инв', '🚪 Открыть']]   
+            reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
+            await update.message.reply_text(description, reply_markup=reply_markup)
+        else:
+            await update.message.reply_text("Нельзя пройти в этом направлении.")
 #⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦
 
 async def start(update: Update, context: CallbackContext) -> None:
@@ -203,7 +222,7 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     location_desc = location_desc + "\nДоступные направления:\n" 
     for key, value in game.current_location.connections.items():
         #print(f"{key}: {value}")
-        location_desc = location_desc + key + " " + value.name
+        location_desc = location_desc + key + " - " + value.name + "\n"
             
         #await update.message.reply_text(key + " " + value.name)
 

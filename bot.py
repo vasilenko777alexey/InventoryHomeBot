@@ -170,10 +170,10 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         else:
             await update.message.reply_text("Нельзя пройти в этом направлении.")
             
-    if text == '⬆️ north' or text == '⬇️ south' or text == '➡️ east' or text == '⬅️ west' :
+    if text == '⬆️ Север' or text == '⬇️ Юг' or text == '➡️ Восток' or text == '⬅️ Запад' :
         #direction = context.args[0].lower()
         direction = text
-        moved = game.move(direction)
+        moved = game.move_to(direction)
         
         if moved:
             description = game.get_description()

@@ -191,25 +191,26 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     description = game.get_description()
     
-    location = game.current_location
-    location_desc = game.current_location.description
-    #await update.message.reply_text(location)
-    await update.message.reply_text(location_desc)
+    location = game.current_location                     #Получаем текущую локацию
+    location_desc = game.current_location.description    #Получаем описание текущей локации
+    #await update.message.reply_text(location_desc)
     connections = list(game.current_location.connections.keys())
-    await update.message.reply_text(connections)
+    #await update.message.reply_text(connections)
     
     direction = ', '.join(game.current_location.connections.keys())
-    await update.message.reply_text(direction)
+    #await update.message.reply_text(direction)
 
     for key, value in game.current_location.connections.items():
-        print(f"{key}: {value}")
-        await update.message.reply_text(key + " " + value.name)
+        #print(f"{key}: {value}")
+        location_desc = location_desc + "\nДоступные направления:" +
+            key + " " + value.name
+        #await update.message.reply_text(key + " " + value.name)
 
     # Создаем клавиатуру из доступных направлений (выходов)
     connections = list(game.current_location.connections.keys())    
-    keyboard = [[direction] for direction in connections]  # Каждая кнопка — отдельная строка    
+    keyboard = [[direction] for direction in connections]]  # Каждая кнопка — отдельная строка    
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
-    await update.message.reply_text(description, reply_markup=reply_markup)
+    await update.message.reply_text(location_desc, reply_markup=reply_markup)
     
     # Создаем клавиатуру из доступных направлений (выходов)
     #room_exits = list(game.rooms[game.current_room]['exits'].keys())    

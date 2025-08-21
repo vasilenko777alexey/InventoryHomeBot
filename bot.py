@@ -204,6 +204,7 @@ async def game(update: Update, context: CallbackContext) -> None:
     user_id = update.effective_user.id
     # Создаем новую игру для пользователя или сбрасываем текущую
     user_games[user_id] = Game()
+    game = user_games.get(user_id)
     await update.message.reply_text("Добро пожаловать в текстовую бродилку!\n" +
                                     "Нажмите кнопку действия\n" +
                                     "👁 осмотреться\n" +

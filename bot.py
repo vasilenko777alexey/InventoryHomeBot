@@ -201,6 +201,7 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
     await update.message.reply_text(description, reply_markup=reply_markup)
+    await update.message.reply_text(room_exits)
 
     #keyboard = ReplyKeyboardMarkup(keyboard=[
     #            ['Button 1', 'Button 2'],

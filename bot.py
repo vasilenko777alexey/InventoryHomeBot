@@ -358,7 +358,6 @@ async def main():
     app.add_handler(CommandHandler('start', start)) 
     app.add_handler(CommandHandler('game', game)) 
     app.add_handler(CommandHandler('look', look))
-    app.add_handler(CommandHandler('go', go))
     app.add_handler(CommandHandler('excel', excel)) 
     await app.bot.set_webhook(f"{URL}/telegram", allowed_updates=Update.ALL_TYPES)
     print("await app.bot.set_webhook(f{URL}/telegram, allowed_updates=Update.ALL_TYPES)")

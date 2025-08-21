@@ -120,8 +120,7 @@ class Game:
                     return True
             elif (self.current_location.connections[direction].type == 'door'
                 and self.current_location.connections[direction].status == 'lock'):
-                    answer.append(self.current_location.connections[direction].key)
-                    
+                    answer.append('Дверь заперта. Нужен: ' + self.current_location.connections[direction].key)                    
                     return False
             else:
                 self.current_location=self.current_location.connections[direction]
@@ -207,8 +206,8 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         else:
             await update.message.reply_text("Нельзя пройти в этом направлении.")
             
-            key = game.current_location.connections[direction].key
-            await update.message.reply_text(key)
+            #key = game.current_location.connections[direction].key
+            #await update.message.reply_text(key)
             await update.message.reply_text(', '.join(answer))
             
 #⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦

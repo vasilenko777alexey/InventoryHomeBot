@@ -120,8 +120,8 @@ class Game:
                     return True
             elif (self.current_location.connections[direction].type == 'door'
                 and self.current_location.connections[direction].status == 'lock'):
-                    key = self.current_location.connections[direction].key
-                    answer = "Дверь заперта. Чтобы открыть нужен:" + key
+                    answer = [self.current_location.connections[direction].key]
+                    
                     return False
             else:
                 self.current_location=self.current_location.connections[direction]
@@ -186,7 +186,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     if text == '⬆️ Север' or text == '⬇️ Юг' or text == '➡️ Восток' or text == '⬅️ Запад' :
         #direction = context.args[0].lower()
         direction = text
-        answer = ""
+        answer = []
         moved = game.move_to(direction, answer)
         
         if moved:
@@ -206,6 +206,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(location_desc, reply_markup=reply_markup)
         else:
             await update.message.reply_text("Нельзя пройти в этом направлении.")
+            game.current_location.connections[direction].key
             await update.message.reply_text(answer)
             
 #⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦

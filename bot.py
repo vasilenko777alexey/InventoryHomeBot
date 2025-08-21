@@ -99,6 +99,7 @@ class Game:
         forest.connect(castle_entry, '⬆️ Север')
         castle_entry.connect(d_castle_hallway, '⬆️ Север')  # Соединение с дверью
         d_castle_hallway.connect(hallway, '⬆️ Север') # Соединение с дверью
+        hallway.connect(d_hallway_dungeon, '⬆️ Север') # Соединение с дверью
         
         # Заполняем словарь локаций для доступа по имени
         self.locations['Деревня'] = village
@@ -108,6 +109,7 @@ class Game:
         self.locations['Вход в замок'] = castle_entry
         self.locations['Дверь: замок-прихожая'] = d_castle_hallway
         self.locations['Прихожая замка'] = hallway
+        self.locations['Дверь: прихожая-подземелье'] = d_hallway_dungeon
         
     def move_to(self, direction, answer):
         # Перемещение по направлению (если есть)

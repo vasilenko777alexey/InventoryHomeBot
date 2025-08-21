@@ -93,9 +93,9 @@ class Game:
         village.connect(forest, '⬆️ Север')          # Лес южнее деревни
         forest.connect(mountain_path, '➡️ Восток')  # Горная тропа восточнее леса
         #⬇️ ⬅️
-        forest.connect(castle, 'Север')
-        castle.connect(d_castle_hallway, 'Дверь')  # Соединение с дверью
-        d_castle_hallway.connect(hallway, 'Дверь') # Соединение с дверью
+        forest.connect(castle, '⬆️ Север')
+        castle.connect(d_castle_hallway, '⬆️ Север')  # Соединение с дверью
+        d_castle_hallway.connect(hallway, '⬆️ Север') # Соединение с дверью
         
         # Заполняем словарь локаций для доступа по имени
         self.locations['Деревня'] = village

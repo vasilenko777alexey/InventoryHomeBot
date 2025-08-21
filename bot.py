@@ -202,8 +202,8 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     for key, value in game.current_location.connections.items():
         #print(f"{key}: {value}")
-        location_desc = location_desc + "\nДоступные направления:" +
-            key + " " + value.name
+        location_desc = location_desc + "\nДоступные направления:" + key + " " + value.name
+            
         #await update.message.reply_text(key + " " + value.name)
 
     # Создаем клавиатуру из доступных направлений (выходов)

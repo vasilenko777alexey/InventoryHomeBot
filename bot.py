@@ -200,9 +200,10 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     direction = ', '.join(game.current_location.connections.keys())
     #await update.message.reply_text(direction)
 
+    location_desc = location_desc + "\nДоступные направления:" 
     for key, value in game.current_location.connections.items():
         #print(f"{key}: {value}")
-        location_desc = location_desc + "\nДоступные направления:" + key + " " + value.name
+        location_desc = location_desc + key + " " + value.name
             
         #await update.message.reply_text(key + " " + value.name)
 

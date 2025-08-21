@@ -203,7 +203,7 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     for key, value in game.current_location.connections.items():
         print(f"{key}: {value}")
-        await update.message.reply_text(key + " " + value)
+        await update.message.reply_text(key + " " + value.name)
 
     # Создаем клавиатуру из доступных направлений (выходов)
     connections = list(game.current_location.connections.keys())    
@@ -211,11 +211,11 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
     
     # Создаем клавиатуру из доступных направлений (выходов)
-    #room_exits = list(game.rooms[game.current_room]['exits'].keys())    
-    #keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
-    #reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
-    #await update.message.reply_text(description, reply_markup=reply_markup)
-    #await update.message.reply_text(room_exits)
+    room_exits = list(game.rooms[game.current_room]['exits'].keys())    
+    keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка    
+    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
+    await update.message.reply_text(description, reply_markup=reply_markup)
+    await update.message.reply_text("room_exits" + room_exits)
 
     #keyboard = ReplyKeyboardMarkup(keyboard=[
     #            ['Button 1', 'Button 2'],

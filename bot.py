@@ -96,7 +96,7 @@ class Game:
         forest.connect(mountain_path, '➡️ Восток')  # Горная тропа восточнее леса
         #⬇️ ⬅️
         forest.connect(castle_entry, '⬆️ Север')
-        castle.connect(d_castle_hallway, '⬆️ Север')  # Соединение с дверью
+        castle_entry.connect(d_castle_hallway, '⬆️ Север')  # Соединение с дверью
         d_castle_hallway.connect(hallway, '⬆️ Север') # Соединение с дверью
         
         # Заполняем словарь локаций для доступа по имени

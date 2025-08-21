@@ -206,7 +206,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(location_desc, reply_markup=reply_markup)
         else:
             await update.message.reply_text("Нельзя пройти в этом направлении.")
-            game.current_location.connections[direction].key
+            key = game.current_location.connections[direction].key
             await update.message.reply_text(answer)
             
 #⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦

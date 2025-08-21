@@ -176,16 +176,20 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         moved = game.move_to(direction)
         
         if moved:
-            description = game.get_description()
-            #await update.message.reply_text(description)
-            
+            location_desc = game.current_location.description                #Получаем описание текущей локации
+            connections = list(game.current_location.connections.keys())     #Получаем список направлений
+            direction = ', '.join(game.current_location.connections.keys())  #Получаем строку список направлений    
+        
+            location_desc = location_desc + "\nДоступные направления:\n" 
+            for key, value in game.current_location.connections.items():
+                #print(f"{key}: {value}")
+                location_desc = location_desc + key + " - " + value.name + "\n"
+
             # Создаем клавиатуру из доступных направлений (выходов)
-            room_exits = list(game.rooms[game.current_room]['exits'].keys())  
-            #keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка 
-            keyboard = [[direction for direction in room_exits],
-                       ['🖐 Взять', '👁 Смот','🎒 Инв', '🚪 Открыть']]   
-            reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
-            await update.message.reply_text(description, reply_markup=reply_markup)
+            connections = list(game.current_location.connections.keys())    
+            keyboard = [[direction for direction in connections]]  # Каждая кнопка — отдельная строка    
+            reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
+            await update.message.reply_text(location_desc, reply_markup=reply_markup)
         else:
             await update.message.reply_text("Нельзя пройти в этом направлении.")
 #⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦
@@ -210,14 +214,10 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     description = game.get_description()
     
-    location = game.current_location                     #Получаем текущую локацию
-    location_desc = game.current_location.description    #Получаем описание текущей локации
-    #await update.message.reply_text(location_desc)
-    connections = list(game.current_location.connections.keys())
-    #await update.message.reply_text(connections)
-    
-    direction = ', '.join(game.current_location.connections.keys())
-    #await update.message.reply_text(direction)
+    location = game.current_location                                 #Получаем текущую локацию
+    location_desc = game.current_location.description                #Получаем описание текущей локации
+    connections = list(game.current_location.connections.keys())     #Получаем список направлений
+    direction = ', '.join(game.current_location.connections.keys())  #Получаем строку список направлений    
 
     location_desc = location_desc + "\nДоступные направления:\n" 
     for key, value in game.current_location.connections.items():

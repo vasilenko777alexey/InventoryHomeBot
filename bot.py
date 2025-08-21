@@ -27,6 +27,39 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 # --- классы --------------------------------------------------------------
 
+# Класс Player — игрок
+class Player:
+    def __init__(self, name, description):
+        self.name = name                  # название
+        self.description = description    # описание
+        self.inventory = []               # инвентарь
+        self.health = health              # здоровье
+        
+# Класс Monster — монстр в локации
+class Monster:
+    def __init__(self, name, health, attack, defense):
+        self.name = name  # имя монстра
+        self.health = health  # здоровье монстра
+        self.attack = attack              # 
+        self.defense = defense            #
+
+    def take_damage(self, damage):
+        self.health -= damage
+
+    def is_dead(self):
+        return self.health <= 0
+
+# Класс Item — вещи, оружие, броня, ключи
+class Item:
+    def __init__(self, name, description, type = 'thing', attack = 0, defense = 0, number = 1):
+        self.name = name                  # название
+        self.description = description    # описание
+        self.type = type                  # тип - вещь, оружие, броня, ключи, деньги
+        self.attack = attack              # 
+        self.defense = defense            #
+        self.number = number              #
+        #self.description = description   #
+        
 # Класс Location — место в игре
 class Location:
     def __init__(self, name, description, type = 'location', status = None, key = None ):
@@ -61,23 +94,6 @@ class Game:
         self.create_world()
          # Начальная локация игрока
         self.current_location = self.locations['Деревня']
-        
-        # Определяем комнаты (простая карта)
-        self.rooms = {
-            'entrance': {
-                'description': 'Вы на входе в старый заброшенный дом.',
-                'exits': {'⬆️ north': 'hall'}
-            },
-            'hall': {
-                'description': 'В большой зале с разбросанными стульями.',
-                'exits': {'⬇️ south': 'entrance', '➡️ east': 'kitchen'}
-            },
-            'kitchen': {
-                'description': 'На кухне стоит старый холодильник.',
-                'exits': {'⬅️ west': 'hall'}
-            }
-        }
-        self.current_room = 'entrance'  # начальная комната
         
     def create_world(self):
         # Создаем локации
@@ -127,19 +143,6 @@ class Game:
                 return True
         return False
 
-    def get_description(self):
-        room = self.rooms[self.current_room]
-        desc = room['description']
-        exits = ', '.join(room['exits'].keys())
-        return f"{desc}\nДоступные направления: {exits}"
-
-    def move(self, direction):
-        room = self.rooms[self.current_room]
-        if direction in room['exits']:
-            self.current_room = room['exits'][direction]
-            return True
-        else:
-            return False
 
 # Хранение игр для каждого пользователя
 user_games = {}
@@ -160,27 +163,8 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     game = user_games.get(user_id)
     if not game:
-        await update.message.reply_text("Пожалуйста, начните игру командой /start.")
+        await update.message.reply_text("Пожалуйста, начните игру командой /game.")
         return
-        
-    if text == '⬆️ north' or text == '⬇️ south' or text == '➡️ east' or text == '⬅️ west' :
-        #direction = context.args[0].lower()
-        direction = text
-        moved = game.move(dirjnection)
-        
-        if moved:
-            description = game.get_description()
-            #await update.message.reply_text(description)
-            
-            # Создаем клавиатуру из доступных направлений (выходов)
-            room_exits = list(game.rooms[game.current_room]['exits'].keys())  
-            #keyboard = [[direction] for direction in room_exits]  # Каждая кнопка — отдельная строка 
-            keyboard = [[direction for direction in room_exits],
-                       ['🖐 Взять', '👁 Смот','🎒 Инв', '🚪 Открыть']]   
-            reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)    
-            await update.message.reply_text(description, reply_markup=reply_markup)
-        else:
-            await update.message.reply_text("Нельзя пройти в этом направлении.")
             
     if text == '⬆️ Север' or text == '⬇️ Юг' or text == '➡️ Восток' or text == '⬅️ Запад' :
         #direction = context.args[0].lower()
@@ -200,7 +184,8 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
 
             # Создаем клавиатуру из доступных направлений (выходов)
             connections = list(game.current_location.connections.keys())    
-            keyboard = [[direction for direction in connections]]  # Каждая кнопка — отдельная строка    
+            #keyboard = [[direction] for direction in connections]  # Каждая кнопка — в новой строке    
+            keyboard = [[direction for direction in connections]]  # Все кнопки — в одной строке    
             reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
             await update.message.reply_text(location_desc, reply_markup=reply_markup)
         else:
@@ -210,7 +195,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             #await update.message.reply_text(key)
             await update.message.reply_text(', '.join(answer))
             
-#⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦
+#⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦⚔️🛡🗡🏆🏷📊👕🧤🧷🚶🔎🖐 👁
 
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здравствуйте. Я бот. ")
@@ -219,8 +204,11 @@ async def game(update: Update, context: CallbackContext) -> None:
     user_id = update.effective_user.id
     # Создаем новую игру для пользователя или сбрасываем текущую
     user_games[user_id] = Game()
-    await update.message.reply_text("Добро пожаловать в текстовую бродилку!\n" +
-                                    "Используйте команды /look.")
+    await update.message.reply_text("Добро пожаловать в текстовую бродилку!\n
+                                    Нажмите кнопку действия\n
+                                    👁 осмотреться")
+    
+    
     
 # Обработчик команды /look — описание текущей комнаты
 async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -229,14 +217,11 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not game:
         await update.message.reply_text("Пожалуйста, начните игру командой /game.")
         return
-        
-    description = game.get_description()
     
     location = game.current_location                                 #Получаем текущую локацию
-    location_desc = game.current_location.description                #Получаем описание текущей локации
-    connections = list(game.current_location.connections.keys())     #Получаем список направлений
     direction = ', '.join(game.current_location.connections.keys())  #Получаем строку список направлений    
 
+    location_desc = game.current_location.description                #Получаем описание текущей локации
     location_desc = location_desc + "\nДоступные направления:\n" 
     for key, value in game.current_location.connections.items():
         #print(f"{key}: {value}")
@@ -245,7 +230,7 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
         #await update.message.reply_text(key + " " + value.name)
 
     # Создаем клавиатуру из доступных направлений (выходов)
-    connections = list(game.current_location.connections.keys())    
+    connections = list(game.current_location.connections.keys())     #Получаем список направлений
     keyboard = [[direction for direction in connections]]  # Каждая кнопка — отдельная строка    
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
     await update.message.reply_text(location_desc, reply_markup=reply_markup)
@@ -263,28 +248,6 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #        ])
     #await update.message.reply_text(room_exits, reply_markup=keyboard)
     
-    
-
-# Обработчик команды /go <направление>
-async def go(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    game = user_games.get(user_id)
-    if not game:
-        await update.message.reply_text("Пожалуйста, начните игру командой /start.")
-        return
-    
-    if len(context.args) == 0:
-        await update.message.reply_text("Укажите направление. Например: /go north")
-        return
-    
-    direction = context.args[0].lower()
-    moved = game.move(direction)
-    
-    if moved:
-        description = game.get_description()
-        await update.message.reply_text(description)
-    else:
-        await update.message.reply_text("Нельзя пройти в этом направлении.")
 
     
 

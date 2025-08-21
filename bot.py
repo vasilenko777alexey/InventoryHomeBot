@@ -82,6 +82,7 @@ class Game:
     def create_world(self):
         # Создаем локации
         village         = Location('Деревня', 'Маленькая уютная деревня.')
+        fountain         = Location('Целебный Фонтан', 'Фонтан исцеляющий раны.')
         forest          = Location('Лес', 'Тёмный дремучий лес.')
         castle          = Location('Замок', 'Древний заброшенный таинственный замок')
         d_castle_hallway  = Location('Дверь в замок', 'Массивная дубовая дверь', 'door', 'open' )
@@ -90,7 +91,8 @@ class Game:
                
         # Соединяем локации
         # Соединяем по сторонам света
-        village.connect(forest, '⬆️ Север')          # Лес южнее деревни
+        village.connect(forest, '⬆️ Север')          # на север лес
+        village.connect(fountain, '➡️ Восток')       # на востоке фонтан
         forest.connect(mountain_path, '➡️ Восток')  # Горная тропа восточнее леса
         #⬇️ ⬅️
         forest.connect(castle, '⬆️ Север')
@@ -99,6 +101,7 @@ class Game:
         
         # Заполняем словарь локаций для доступа по имени
         self.locations['Деревня'] = village
+        self.locations['Целебный Фонтан'] = fountain
         self.locations['Лес'] = forest
         self.locations['Горная тропа'] = mountain_path
         self.locations['Замок'] = castle

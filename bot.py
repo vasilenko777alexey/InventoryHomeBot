@@ -208,7 +208,7 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Создаем клавиатуру из доступных направлений (выходов)
     connections = list(game.current_location.connections.keys())    
-    keyboard = [[direction] for direction in connections]]  # Каждая кнопка — отдельная строка    
+    keyboard = [[direction for direction in connections]]  # Каждая кнопка — отдельная строка    
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
     await update.message.reply_text(location_desc, reply_markup=reply_markup)
     

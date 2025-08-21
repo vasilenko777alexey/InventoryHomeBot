@@ -201,9 +201,6 @@ async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     direction = ', '.join(game.current_location.connections.keys())
     await update.message.reply_text(direction)
 
-    items = ', '.join(game.current_location.connections.items())
-    await update.message.reply_text(items)
-
     for key, value in game.current_location.connections.items():
         print(f"{key}: {value}")
         await update.message.reply_text(key + " " + value)

@@ -172,11 +172,11 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         answer = []
         moved = game.move_to(direction, answer)
         
-        if moved:
-            location_desc = game.current_location.description                #Получаем описание текущей локации
-            connections = list(game.current_location.connections.keys())     #Получаем список направлений
+        if moved:            
+            #connections = list(game.current_location.connections.keys())     #Получаем список направлений
             direction = ', '.join(game.current_location.connections.keys())  #Получаем строку список направлений    
-        
+
+            location_desc = game.current_location.description                #Получаем описание текущей локации
             location_desc = location_desc + "\nДоступные направления:\n" 
             for key, value in game.current_location.connections.items():
                 #print(f"{key}: {value}")
@@ -194,8 +194,8 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             #key = game.current_location.connections[direction].key
             #await update.message.reply_text(key)
             await update.message.reply_text(', '.join(answer))
-            
-#⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦⚔️🛡🗡🏆🏷📊👕🧤🧷🚶🔎🖐 👁
+           
+#⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦⚔️🛡🗡🏆🏷📊👕🧤🧷🚶🔎🖐 👁⬆️⬇️➡️⬅️
 
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здравствуйте. Я бот. ")
@@ -204,12 +204,23 @@ async def game(update: Update, context: CallbackContext) -> None:
     user_id = update.effective_user.id
     # Создаем новую игру для пользователя или сбрасываем текущую
     user_games[user_id] = Game()
-    await update.message.reply_text("Добро пожаловать в текстовую бродилку!\n
-                                    Нажмите кнопку действия\n
-                                    👁 осмотреться")
-    
-    
-    
+    await update.message.reply_text("Добро пожаловать в текстовую бродилку!\n" +
+                                    "Нажмите кнопку действия\n" +
+                                    "👁 осмотреться\n" +
+                                    "🎒 инвентарь\n" +
+                                    "⬆️ осмотреться\n" +
+                                    "⬇️ осмотреться\n" +
+                                    "➡️ осмотреться\n" +
+                                    "⬅️ осмотреться" 
+                                   )
+    direction = ', '.join(game.current_location.connections.keys())  #Получаем строку список направлений 
+    # Создаем клавиатуру из доступных направлений (выходов)
+    connections = list(game.current_location.connections.keys())     #Получаем список направлений
+    keyboard = [[direction for direction in connections],
+               ['👁','🎒']]     
+    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
+    await update.message.reply_text(location_desc, reply_markup=reply_markup)
+
 # Обработчик команды /look — описание текущей комнаты
 async def look(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id

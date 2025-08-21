@@ -213,6 +213,7 @@ async def game(update: Update, context: CallbackContext) -> None:
                                     "➡️ осмотреться\n" +
                                     "⬅️ осмотреться" 
                                    )
+    location_desc = game.current_location.description                #Получаем описание текущей локации
     direction = ', '.join(game.current_location.connections.keys())  #Получаем строку список направлений 
     # Создаем клавиатуру из доступных направлений (выходов)
     connections = list(game.current_location.connections.keys())     #Получаем список направлений

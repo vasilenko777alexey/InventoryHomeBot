@@ -269,8 +269,8 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         # Создаем клавиатуру из доступных направлений (выходов)
         connections = list(game.current_location.connections.keys())     #Получаем список направлений
         keyboard = [[direction for direction in connections]]  # Каждая кнопка — отдельная строка    
-        boxes = list([box for box in game.current_location.boxes])
-        location_desc = location_desc + '📦' + boxes
+        boxes = ', '.join(list([box for box in game.current_location.boxes]))
+        location_desc = location_desc + ' 📦 ' + boxes
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
         await update.message.reply_text(location_desc, reply_markup=reply_markup)
            

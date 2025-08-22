@@ -29,7 +29,7 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 # Класс Player — игрок
 class Player:
-    def __init__(self, name, description):
+    def __init__(self, name, description, health):
         self.name = name                  # название
         self.description = description    # описание
         self.inventory = []               # инвентарь
@@ -91,7 +91,7 @@ class Game:
     def __init__(self):
         # Инициализация локаций
         self.locations = {}
-        self.player = Player("Хранитель","Из ордена хранителей")
+        self.player = Player("Хранитель","Из ордена хранителей", 100)
         self.create_world()
          # Начальная локация игрока
         self.current_location = self.locations['Деревня']

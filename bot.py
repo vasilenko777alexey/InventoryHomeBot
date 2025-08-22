@@ -54,7 +54,7 @@ class Item:
     def __init__(self, name, description, type = 'thing', attack = 0, defense = 0, number = 1):
         self.name = name                  # название
         self.description = description    # описание
-        self.type = type                  # тип - вещь, оружие, броня, ключи, деньги
+        self.type = type                  # тип: вещь-thing, оружие-weapon, броня-armor, ключи-key, деньги-money 
         self.attack = attack              # 
         self.defense = defense            #
         self.number = number              #
@@ -91,6 +91,7 @@ class Game:
     def __init__(self):
         # Инициализация локаций
         self.locations = {}
+        self.player = Player("Хранитель","Из ордена хранителей")
         self.create_world()
          # Начальная локация игрока
         self.current_location = self.locations['Деревня']
@@ -126,6 +127,13 @@ class Game:
         self.locations['Дверь: замок-прихожая'] = d_castle_hallway
         self.locations['Прихожая замка'] = hallway
         self.locations['Дверь: прихожая-подземелье'] = d_hallway_dungeon
+
+        #Создаем вещи оружие экипировку ключи
+        hunter_knife = Item('Охотничий нож', 'Хороший крепкий нож', 'weapon', 10, 0, 1)
+
+        #Заполняем инвентарь
+        self.player.inventory
+        
         
     def move_to(self, direction, answer):
         # Перемещение по направлению (если есть)
@@ -195,7 +203,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             #await update.message.reply_text(key)
             await update.message.reply_text(', '.join(answer))
            
-#⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦⚔️🛡🗡🏆🏷📊👕🧤🧷🚶🔎🖐 👁⬆️⬇️➡️⬅️
+
 
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Здравствуйте. Я бот. ")
@@ -209,10 +217,10 @@ async def game(update: Update, context: CallbackContext) -> None:
                                     "Нажмите кнопку действия\n" +
                                     "👁 осмотреться\n" +
                                     "🎒 инвентарь\n" +
-                                    "⬆️ осмотреться\n" +
-                                    "⬇️ осмотреться\n" +
-                                    "➡️ осмотреться\n" +
-                                    "⬅️ осмотреться" 
+                                    "⬆️ идти на север\n" +
+                                    "⬇️ идти на юг\n" +
+                                    "➡️ идти на восток\n" +
+                                    "⬅️ идти на запад" 
                                    )
     location_desc = game.current_location.description                #Получаем описание текущей локации
     direction = ', '.join(game.current_location.connections.keys())  #Получаем строку список направлений 
@@ -421,3 +429,553 @@ threading.Thread(target=self_ping_loop, daemon=True).start()
 
 if __name__ == "__main__":
     asyncio.run(main())
+#⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦⚔️🛡🗡🏆🏷📊👕🧤🧷🚶🔎🖐 👁⬆️⬇️➡️⬅️
+
+#👋 Waving Hand
+#🤚 Raised Back of Hand
+#🖐️ Hand With Fingers Splayed
+#✋ Raised Hand
+#🖖 Vulcan Salute
+#🫱 Rightwards Hand
+#🫲 Leftwards Hand
+#🫳 Palm Down Hand
+#🫴 Palm Up Hand
+#👌 OK Hand
+#🤌 Pinched Fingers
+#🤏 Pinching Hand
+#✌️ Victory Hand
+#🤞 Crossed Fingers
+#🫰 Hand With Index Finger And Thumb Crossed
+#🤟 Love-You Gesture
+#🤘 Sign of the Horns
+#🤙 Call Me Hand
+#👈 Backhand Index Pointing Left
+#👉 Backhand Index Pointing Right
+#👆 Backhand Index Pointing Up
+#🖕 Middle Finger
+#👇 Backhand Index Pointing Down
+#☝️ Index Pointing Up
+#🫵 Index Pointing At The Viewer
+#👍 Thumbs Up
+#👎 Thumbs Down
+#✊ Raised Fist
+#👊 Oncoming Fist
+#🤛 Left-Facing Fist
+#🤜 Right-Facing Fist
+#👏 Clapping Hands
+#🙌 Raising Hands
+#🫶 Heart Hands
+#👐 Open Hands
+#🤲 Palms Up Together
+#🤝 Handshake
+#🙏 Folded Hands
+#✍️ Writing Hand
+#💅 Nail Polish
+#💪 Flexed Biceps
+#🦾 Mechanical Arm
+#🦿 Mechanical Leg
+#🦵 Leg
+#🦶 Foot
+#👂 Ear
+#🦻 Ear With Hearing Aid
+👃 Nose
+#🦷 Tooth
+#🦴 Bone
+#👀 Eyes
+#👁️ Eye
+#👅 Tongue
+#👄 Mouth
+#🫦 Biting Lip
+#👶 Baby
+#👵 Old Woman
+#🤦 Person Facepalming
+#🤦‍♂️ Man Facepalming
+#🤦‍♀️ Woman Facepalming
+#🤷 Person Shrugging
+#🤷‍♂️ Man Shrugging
+#🤷‍♀️ Woman Shrugging
+#👨‍⚕️ ️Man Health Worker
+#👩‍⚕️ ️Woman Health Worker
+#👨‍🏫 Man Teacher
+#🧑‍💻 Technologist
+#👨‍💻 Man Technologist
+#👩‍💻 Woman Technologist
+#👮‍♂️ Man Police Officer
+#👮‍♀️ Woman Police Officer
+#🤰 Pregnant Woman
+#🎅 Santa Claus
+#🤶 Mrs. Claus
+#🧑‍🎄 Mx Claus
+#🧟 Zombie
+#🧟‍♂️ Man Zombie
+#🧟‍♀️ Woman Zombie
+#💃 Woman Dancing
+#🕺 Man Dancing
+#👨‍👩‍👧‍👦 Family: Man, Woman, Girl, Boy
+#🗣️ Speaking Head
+#👤 Bust in Silhouette
+#👥 Busts in Silhouette
+#🫂 People Hugging
+#👣 Footprints
+#🐼 Animals & Nature
+#
+#🐵 Monkey Face
+#🦍 Gorilla
+#🐶 Dog Face
+#🦊 Fox
+#🦝 Raccoon
+#🐱 Cat Face
+#🐯 Tiger Face
+#🐅 Tiger
+#🐆 Leopard
+#🐴 Horse Face
+#🐎 Horse
+#🦄 Unicorn
+#🦓 Zebra
+#🦌 Deer
+#🦬 Bison
+#🐂 Ox
+#🐄 Cow
+#🐷 Pig Face
+#🐽 Pig Nose
+#🦙 Llama
+#🐭 Mouse Face
+#🐹 Hamster
+#🐰 Rabbit Face
+#🐇 Rabbit
+#🦇 Bat
+#🐻 Bear
+#🐻‍❄️ Polar Bear
+#🐨 Koala
+#🐼 Panda
+#🦘 Kangaroo
+#🐾 Paw Prints
+#🐔 Chicken
+#🐣 Hatching Chick
+#🐤 Baby Chick
+#🐥 Front-Facing Baby Chick
+#🐦 Bird
+#🐧 Penguin
+#🕊️ Dove
+#🦆 Duck
+#🦢 Swan
+#🦉 Owl
+#🦜 Parrot
+#🐢 Turtle
+#🐍 Snake
+#🐳 Spouting Whale
+#🦭 Seal
+#🐟 Fish
+#🐠 Tropical Fish
+#🐙 Octopus
+#🐌 Snail
+#🦋 Butterfly
+#🪲 Beetle
+#🐞 Lady Beetle
+#🪳 Cockroach
+#🕷️ Spider
+#🕸️ Spider Web
+#🦟 Mosquito
+#🦠 Microbe
+#🌸 Cherry Blossom
+#🌹 Rose
+#🌺 Hibiscus
+#🌼 Blossom
+#🌷 Tulip
+#🌱 Seedling
+#🌲 Evergreen Tree
+#🌳 Deciduous Tree
+#🌴 Palm Tree
+#🌵 Cactus
+#🌿 Herb
+#🍀 Four Leaf Clover
+#
+#🍕 Food & Drink
+#
+#🍌 Banana
+#🍓 Strawberry
+#🥨 Pretzel
+#🥞 Pancakes
+#🍖 Meat on Bone
+#🍗 Poultry Leg
+#🍔 Hamburger
+#🍟 French Fries
+#🍕 Pizza
+#🌭 Hot Dog
+#🥪 Sandwich
+#🌮 Taco
+#🥙 Stuffed Flatbread
+#🍳 Cooking
+#🍿 Popcorn
+#🥫 Canned Food
+#🍱 Bento Box
+#🍘 Rice Cracker
+#🍙 Rice Ball
+#🍢 Oden
+#🍣 Sushi
+#🍥 Fish Cake With Swirl
+#🍡 Dango
+#🦞 Lobster
+#🦐 Shrimp
+#🍦 Soft Ice Cream
+#🍩 Doughnut
+#🍪 Cookie
+#🎂 Birthday Cake
+#🍰 Shortcake
+#🧁 Cupcake
+#🥧 Pie
+#🍫 Chocolate Bar
+#🍭 Lollipop
+#🍮 Custard
+#☕ Hot Beverage
+#🍾 Bottle With Popping Cork
+#🍷 Wine Glass
+#🍸 Cocktail Glass
+#🍹 Tropical Drink
+#🥂 Clinking Glasses
+#🥃 Tumbler Glass
+#🫗 Pouring Liquid
+#🥤 Cup With Straw
+#🧋 Bubble Tea
+#🧃 Beverage Box
+#🧉 Mate
+#🍽️ Fork and Knife With Plate
+#
+#🌇 Travel & Places
+#
+#🧭 Compass
+#🏕️ Camping
+#🏖️ Beach With Umbrella
+#🏝️ Desert Island
+#🏛️ Classical Building
+#🏠 House
+#♨️ Hot Springs
+#🎢 Roller Coaster
+#🚂 Locomotive
+#🚑 Ambulance
+#🚓 Police Car
+#🚕 Taxi
+#🚗 Automobile
+#🛥️ Motor Boat
+#✈️ Airplane
+#🚀 Rocket
+#🧳 Luggage
+#⌛ Hourglass Done
+#⏳ Hourglass Not Done
+#🌑 New Moon
+#🌒 Waxing Crescent Moon
+#🌓 First Quarter Moon
+#🌔 Waxing Gibbous Moon
+#🌕 Full Moon
+#🌖 Waning Gibbous Moon
+#🌗 Last Quarter Moon
+#🌘 Waning Crescent Moon
+#🌚 New Moon Face
+#🌛 First Quarter Moon Face
+#🌜 Last Quarter Moon Face
+#🌡️ Thermometer
+#☀️ Sun
+#🌝 Full Moon Face
+#🌞 Sun With Face
+#⭐ Star
+#🌟 Glowing Star
+#☁️ Cloud
+#⛅ Sun Behind Cloud
+#⛈️ Cloud With Lightning and Rain
+#🌤️ Sun Behind Small Cloud
+#🌥️ Sun Behind Large Cloud
+#🌦️ Sun Behind Rain Cloud
+#🌧️ Cloud With Rain
+#🌨️ Cloud With Snow
+#🌩️ Cloud With Lightning
+#⚡ High Voltage
+#❄️ Snowflake
+#☃️ Snowman
+#⛄ Snowman Without Snow
+#🔥 Fire
+#
+#🎈 Activities
+#
+#🎃 Jack-O-Lantern
+#🎄 Christmas Tree
+#🎆 Fireworks
+#🎇 Sparkler
+#🧨 Firecracker
+#✨ Sparkles
+#🎈 Balloon
+#🎉 Party Popper
+#🎊 Confetti Ball
+#🎗️ Reminder Ribbon
+#🎟️ Admission Tickets
+#🎫 Ticket
+#🎖️ Military Medal
+#🏆 Trophy
+#🏅 Sports Medal
+#🥇 1st Place Medal
+#🥈 2nd Place Medal
+#🥉 3rd Place Medal
+#⚽ Soccer Ball
+#🏀 Basketball
+#🛷 Sled
+#🔮 Crystal Ball
+#🪄 Magic Wand
+#🎮 Video Game
+#🪩 Mirror Ball
+#🎭 Performing Arts
+#🎨 Artist Palette
+#
+#📮 Objects
+#
+#💣 Bomb
+#👛 Purse
+#👜 Handbag
+#🛍️ Shopping Bags
+#👠 High-heeled Shoe
+#👑 Crown
+#🎩 Top Hat
+#🎓 Graduation Cap
+#🪖 Military Helmet
+#💄 Lipstick
+#💎 Gem Stone
+#📣 Megaphone
+#🎵 Musical Note
+#🎶 Musical Notes
+#🎙️ Studio Microphone
+#🎤 Microphone
+#📱 Mobile Phone
+#☎️ Telephone
+#📞 Telephone Receiver
+#💻 Laptop
+#🖨️ Printer
+#⌨️ Keyboard
+#🧮 Abacus
+#🎬 Clapper Board
+#📺 Television
+#🔍 Magnifying Glass Tilted Left
+#🔎 Magnifying Glass Tilted Right
+#💡 Light Bulb
+#📖 Open Book
+#📚 Books
+#📰 Newspaper
+#💰 Money Bag
+#🪙 Coin
+#💸 Money With Wings
+#✉️ Envelope
+#📤 Outbox Tray
+#📥 Inbox Tray
+#📭 Open Mailbox With Lowered Flag
+#🗳️ Ballot Box With Ballot
+#📝 Memo
+#💼 Briefcase
+#📁 File Folder
+#📂 Open File Folder
+#🗂️ Card Index Dividers
+#📆 Tear-Off Calendar
+#📈 Chart Increasing
+#📉 Chart Decreasing
+#📊 Bar Chart
+#🔐 Locked With Key
+#🔑 Key
+#🗝️ Old Key
+#🧰 Toolbox
+#🧪 Test Tube
+#🔬 Microscope
+#🔭 Telescope
+#💉 Syringe
+#💊 Pill
+#🩺 Stethoscope
+#🧻 Roll Of Paper
+#🧼 Soap
+#🧽 Sponge
+#🛒 Shopping Cart
+#⚰️ Coffin
+#🗿 Moai
+#
+#💯 Symbols
+#
+#🚹 Men’s Room
+#🚺 Women’s Room
+#🚼 Baby Symbol
+#🛃 Customs
+#🔞 No One Under Eighteen
+#🔝 TOP Arrow
+#♐ Sagittarius
+#♑ Capricorn
+#♒ Aquarius
+#♓ Pisces
+#⛎ Ophiuchus
+#‼️ Double Exclamation Mark
+#⁉️ Exclamation Question Mark
+#❓ Question Mark
+#❔ White Question Mark
+#❕ White Exclamation Mark
+#❗ Exclamation Mark
+#💱 Currency Exchange
+#✅ Check Mark Button
+#☑️ Check Box With Check
+#✔️ Check Mark
+#❌ Cross Mark
+#🆒 COOL Button
+#🆓 FREE Button
+#🆕 NEW Button
+#🆗 OK Button
+#🆙 UP! Button
+#😀 Grinning Face
+#😃 Grinning Face With Big Eyes
+#😄 Grinning Face With Smiling Eyes
+#😁 Beaming Face With Smiling Eyes
+#😆 Grinning Squinting Face
+#😅 Grinning Face With Sweat
+#🤣 Rolling on the Floor Laughing
+#😂 Face With Tears of Joy
+#🙂 Slightly Smiling Face
+#🙃 Upside-Down Face
+#🫠 Melting Face
+#😉 Winking Face
+#😊 Smiling Face With Smiling Eyes
+#😇 Smiling Face With Halo
+#🥰 Smiling Face With Hearts
+#😍 Smiling Face With Heart-Eyes
+#🤩 Star-Struck
+#😘 Face Blowing a Kiss
+#😗 Kissing Face
+#☺️ Smiling Face
+#😚 Kissing Face With Closed Eyes
+#😙 Kissing Face With Smiling Eyes
+#🥲 Smiling Face With Tear
+#😋 Face Savoring Food
+#😛 Face With Tongue
+#😜 Winking Face With Tongue
+#🤪 Zany Face
+#😝 Squinting Face With Tongue
+#🤑 Money-Mouth Face
+#🤗 Hugging Face
+#🤭 Face With Hand Over Mouth
+#🫢 Face With Open Eyes And Hand Over Mouth
+#🫣 Face With Peeking Eye
+#🤫 Shushing Face
+#🤔 Thinking Face
+#🫡 Saluting Face
+#🤐 Zipper-Mouth Face
+#🤨 Face With Raised Eyebrow
+#😐 Neutral Face
+#😑 Expressionless Face
+#😶 Face Without Mouth
+#🫥 Dotted Line Face
+#😶‍🌫️ Face in clouds
+#😏 Smirking Face
+#😒 Unamused Face
+#🙄 Face With Rolling Eyes
+#😬 Grimacing Face
+#😮‍💨 Face exhaling
+#🤥 Lying Face
+#😌 Relieved Face
+#😔 Pensive Face
+#😪 Sleepy Face
+#🤤 Drooling Face
+#😴 Sleeping Face
+#😷 Face With Medical Mask
+#🤒 Face With Thermometer
+#🤕 Face With Head-Bandage
+#🤢 Nauseated Face
+#🤮 Face Vomiting
+#🤧 Sneezing Face
+#🥵 Hot Face
+#🥶 Cold Face
+#🥴 Woozy Face
+#😵 Dizzy Face
+#😵‍💫 Face with spiral eyes
+#🤯 Exploding Head
+#🤠 Cowboy Hat Face
+#🥳 Partying Face
+#🥸 Disguised Face
+#😎 Smiling Face With Sunglasses
+#🤓 Nerd Face
+#🧐 Face With Monocle
+#😕 Confused Face
+#🫤 Face With Diagonal Mouth
+#😟 Worried Face
+#🙁 Slightly Frowning Face
+#☹️ Frowning Face
+#😮 Face With Open Mouth
+#😯 Hushed Face
+#😲 Astonished Face
+#😳 Flushed Face
+#🥺 Pleading Face
+#🥹 Face Holding Back Tears
+#😦 Frowning Face With Open Mouth
+#😧 Anguished Face
+#😨 Fearful Face
+#😰 Anxious Face With Sweat
+#😥 Sad But Relieved Face
+#😢 Crying Face
+#😭 Loudly Crying Face
+#😱 Face Screaming in Fear
+#😖 Confounded Face
+#😣 Persevering Face
+#😞 Disappointed Face
+#😓 Downcast Face With Sweat
+#😩 Weary Face
+#😫 Tired Face
+#🥱 Yawning Face
+#😤 Face With Steam From Nose
+#😡 Pouting Face
+#😠 Angry Face
+#🤬 Face With Symbols On Mouth
+#😈 Smiling Face With Horns
+#👿 Angry Face With Horns
+#💀 Skull
+#☠️ Skull and Crossbones
+#💩 Pile of Poo
+#🤡 Clown Face
+#👹 Ogre
+#👺 Goblin
+#👻 Ghost
+#👽 Alien
+#👾 Alien Monster
+#🤖 Robot
+#😺 Grinning Cat
+#😸 Grinning Cat With Smiling Eyes
+#😹 Cat With Tears Of Joy
+#😻 Smiling Cat With Heart-Eyes
+#😼 Cat With Wry Smile
+#😽 Kissing Cat
+#🙀 Weary Cat
+#😿 Crying Cat
+#😾 Pouting Cat
+#🙈 See-No-Evil Monkey
+#🙉 Hear-no-evil Monkey
+#🙊 Speak-No-Evil Monkey
+#💋 Kiss Mark
+#💌 Love Letter
+#💘 Heart With Arrow
+#💝 Heart With Ribbon
+#💖 Sparkling Heart
+#💗 Growing Heart
+#💓 Beating Heart
+#💞 Revolving Hearts
+#💕 Two Hearts
+#💟 Heart Decoration
+#❣️ Heart Exclamation
+#💔 Broken Heart
+#❤️‍🔥 Heart on fire
+#❤️‍🩹 Mending heart
+#❤️ Red Heart
+#🧡 Orange Heart
+#💛 Yellow Heart
+#💚 Green Heart
+#💙 Blue Heart
+#💜 Purple Heart
+#🤎 Brown Heart
+#🖤 Black Heart
+#🤍 White Heart
+#💯 Hundred Points
+#💢 Anger Symbol
+#💥 Collision
+#💫 Dizzy
+#💬 Speech Balloon
+#🗯️ Right Anger Bubble
+#💭 Thought Balloon
+#💤 Zzz
+#🤷 People & Body
+#

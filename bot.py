@@ -225,15 +225,15 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
         await update.message.reply_text('🧳', reply_markup=reply_markup)
     
-    elif text == '🔪': or text == '🧤':       
-
-       if text == '🔪':            
-        text_message = "{hunter_knife.picture}. {hunter_knife.name}. {hunter_knife.description}. Урон: {hunter_knife.attack}."
-        keyboard = []
-        keyboard.append(['🖐','🗑️'])
-        keyboard.append(['👀','🧳'])
-        reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
-        await update.message.reply_text( text_message, reply_markup=reply_markup)
+    elif text == '🔪' or text == '🧤':       
+        
+        if text == '🔪':            
+            text_message = "{hunter_knife.picture}. {hunter_knife.name}. {hunter_knife.description}. Урон: {hunter_knife.attack}."
+            keyboard = []
+            keyboard.append(['🖐','🗑️'])
+            keyboard.append(['👀','🧳'])
+            reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
+            await update.message.reply_text( text_message, reply_markup=reply_markup)
         
     elif text == '👀':
         location = game.current_location                                 #Получаем текущую локацию

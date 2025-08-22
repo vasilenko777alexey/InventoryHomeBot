@@ -233,10 +233,11 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
                     found_item = item
                     break
             
-            text_message = f"{found_item.picture}. {found_item.name}. {found_item.description}. Урон: {found_item.attack}."
+            text_message = f"{found_item.picture} {found_item.name}. {found_item.description}. Урон: {found_item.attack}."
             keyboard = []
             keyboard.append(['🖐','🗑️'])
-            keyboard.append(['👀','🧳'])
+            keyboard.append(['👀','🧳','📦','⚔️','🛡'])
+            keyboard.append(['👕','🗡️','⚔️','🗡','⚔'])
             reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
             await update.message.reply_text( text_message, reply_markup=reply_markup)
         
@@ -486,7 +487,7 @@ threading.Thread(target=self_ping_loop, daemon=True).start()
 
 if __name__ == "__main__":
     asyncio.run(main())
-#⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦⚔️🛡🗡🏆🏷📊👕🧤🧷🚶🔎🖐 👁⬆️⬇️➡️⬅️🔪#💀 ☠️ 💥 🗡️ 🛡️🗑️
+#⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦⚔️🛡🗡🗡️⚔️🗡⚔🏆🏷📊👕🧤🧷🚶🔎🖐 👁⬆️⬇️➡️⬅️🔪#💀 ☠️ 💥 🗡️ 🛡️🗑️
 #🗡️⚔️🗡⚔🏹🛡️🔪⚜️👑⚜🔰🔱⛏💎🏆☣⛩️✴🔥⚕☠✝🪽🪓🕷💀🌀☯🖌↗🚩💘☝🦅🏮🆕
 #👋 Waving Hand
 #🤚 Raised Back of Hand

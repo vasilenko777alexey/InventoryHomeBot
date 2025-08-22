@@ -227,8 +227,13 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     
     elif text == '🔪' or text == '🧤':       
         
-        if text == '🔪':            
-            text_message = "{hunter_knife.picture}. {hunter_knife.name}. {hunter_knife.description}. Урон: {hunter_knife.attack}."
+        if text == '🔪': 
+            for item in game.current_box:
+                if item.picture == '🔪':
+                    found_item = item
+                    break
+            
+            text_message = f"{found_item.picture}. {found_item.name}. {found_item.description}. Урон: {found_item.attack}."
             keyboard = []
             keyboard.append(['🖐','🗑️'])
             keyboard.append(['👀','🧳'])

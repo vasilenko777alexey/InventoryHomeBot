@@ -221,7 +221,15 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         #inventory = list(game.player.inventory)
         #.current_box
         game.current_box = game.player.inventory
-        keyboard = [[element.picture for element in game.current_box]] # Каждая кнопка — в новой строке   
+
+        #Разделяем список инвентаря на строки кратные 6
+        result = []
+        for i in range(0, len(game.current_box), 6):
+            sublist = my_list[i:i+6]
+            result.append(sublist)
+            
+        #keyboard = [[element.picture for element in game.current_box]] # Каждая кнопка — в новой строке   
+        keyboard = result
         keyboard.append(['👀'])
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
         await update.message.reply_text('🧳', reply_markup=reply_markup)

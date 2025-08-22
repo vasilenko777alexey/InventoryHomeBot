@@ -27,6 +27,13 @@ logging.basicConfig(format=log_fmt, level=logging.INFO)
 
 # --- классы --------------------------------------------------------------
 
+# Класс Box — сундук, место хранения, инвентарь
+class Box:
+    def __init__(self, name, description):
+        self.name = name                  # название
+        self.description = description    # описание
+        self.inventory = []               # инвентарь        
+
 # Класс Player — игрок
 class Player:
     def __init__(self, name, description, health):
@@ -68,6 +75,7 @@ class Location:
         self.connections = {}   # список соседних локаций
         self.monster = None  # монстр в локации (может быть None)
         self.items = []      # предметы в локации
+        self.boxes = []      # предметы в локации
         self.type = type      # тип локации дверь/локация - door/location
         self.status = status #Статус двери, если тип дверь, открыта/закрыта/сломана - open/lock/broken
         self.key = key #Ключ для двери, если тип дверь, строка - Название ключа
@@ -133,10 +141,15 @@ class Game:
         hunter_knife = Item('Охотничий нож', 'Хороший крепкий нож', 'weapon', 10, 0, 1, '🔪')
         leather_gloves = Item('Кожанные перчатки', 'Старые кожанные перчатки', 'equipment', 0, 5, 1, '🧤')
 
+        #Создаем сундуки
+        wood_box = Box('Сундук','Деревянный сундук')
+
+        #Расставляем сундуки
+        hallway.boxes.append(wood_box)
 
         #Заполняем инвентарь
-        self.player.inventory.append(hunter_knife)
-        self.player.inventory.append(leather_gloves)
+        self.player.inventory.append(hunter_knife)        
+        wood_box.inventory.append(leather_gloves)
    
         
     def move_to(self, direction, answer):
@@ -256,6 +269,8 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         # Создаем клавиатуру из доступных направлений (выходов)
         connections = list(game.current_location.connections.keys())     #Получаем список направлений
         keyboard = [[direction for direction in connections]]  # Каждая кнопка — отдельная строка    
+        boxes = list([box for box in game.current_location.boxes])
+        location_desc = location_desc + '📦' + boxes
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
         await update.message.reply_text(location_desc, reply_markup=reply_markup)
            

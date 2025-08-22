@@ -218,8 +218,8 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
 
     elif text == '🧳':
         #inventory = list(game.player.inventory)
-        keyboard = [[element.picture, element.name, '🖐️', '🗑️'] for element in game.player.inventory,
-                   ['👀']]  # Каждая кнопка — в новой строке    
+        keyboard = [[element.picture, element.name, '🖐️', '🗑️'] for element in game.player.inventory] # Каждая кнопка — в новой строке   
+        keyboard.append(['👀'])
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
         await update.message.reply_text('🧳', reply_markup=reply_markup)
         

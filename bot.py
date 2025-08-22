@@ -51,7 +51,7 @@ class Monster:
 
 # Класс Item — вещи, оружие, броня, ключи
 class Item:
-    def __init__(self, name, description, type = 'thing', attack = 0, defense = 0, number = 1, picture):
+    def __init__(self, name, description, type = 'thing', attack = 0, defense = 0, number = 1, picture = '❔'):
         self.name = name                  # название
         self.description = description    # описание
         self.type = type                  # тип: вещь-thing, оружие-weapon, экипировка-equipment, ключи-key, деньги-money 

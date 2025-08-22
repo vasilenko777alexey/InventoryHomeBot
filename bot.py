@@ -209,10 +209,25 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         #inventory = list(game.player.inventory)
         keyboard = [[element.name, '🖐️'] for element in game.player.inventory]  # Каждая кнопка — в новой строке    
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
-        await update.message.reply_text(location_desc, reply_markup=reply_markup)
+        await update.message.reply_text('🧳', reply_markup=reply_markup)
         
     elif text == '👀':
-        look()
+        location = game.current_location                                 #Получаем текущую локацию
+        direction = ', '.join(game.current_location.connections.keys())  #Получаем строку список направлений    
+    
+        location_desc = game.current_location.description                #Получаем описание текущей локации
+        location_desc = location_desc + "\nДоступные направления:\n" 
+        for key, value in game.current_location.connections.items():
+            #print(f"{key}: {value}")
+            location_desc = location_desc + key + " - " + value.name + "\n"
+                
+            #await update.message.reply_text(key + " " + value.name)
+    
+        # Создаем клавиатуру из доступных направлений (выходов)
+        connections = list(game.current_location.connections.keys())     #Получаем список направлений
+        keyboard = [[direction for direction in connections]]  # Каждая кнопка — отдельная строка    
+        reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
+        await update.message.reply_text(location_desc, reply_markup=reply_markup)
            
 
 

@@ -225,7 +225,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         #Разделяем список инвентаря на строки кратные 6
         result = []
         for i in range(0, len(game.current_box), 6):
-            sublist = my_list[i:i+6]
+            sublist = game.current_box[i:i+6].picture
             result.append(sublist)
             
         #keyboard = [[element.picture for element in game.current_box]] # Каждая кнопка — в новой строке   

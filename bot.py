@@ -51,14 +51,14 @@ class Monster:
 
 # Класс Item — вещи, оружие, броня, ключи
 class Item:
-    def __init__(self, name, description, type = 'thing', attack = 0, defense = 0, number = 1):
+    def __init__(self, name, description, type = 'thing', attack = 0, defense = 0, number = 1, picture):
         self.name = name                  # название
         self.description = description    # описание
         self.type = type                  # тип: вещь-thing, оружие-weapon, экипировка-equipment, ключи-key, деньги-money 
         self.attack = attack              # 
         self.defense = defense            #
         self.number = number              #
-        #self.description = description   #
+        self.picture = picture   #
         
 # Класс Location — место в игре
 class Location:
@@ -129,10 +129,21 @@ class Game:
         self.locations['Дверь: прихожая-подземелье'] = d_hallway_dungeon
 
         #Создаем вещи оружие экипировку ключи
-        hunter_knife = Item('Охотничий нож', 'Хороший крепкий нож', 'weapon', 10, 0, 1)
-        leather_gloves = Item('Кожанные перчатки', 'Старые кожанные перчатки', 'equipment', 0, 5, 1)
+        hunter_knife = Item('Охотничий нож', 'Хороший крепкий нож', 'weapon', 10, 0, 1, '🔪')
+        leather_gloves = Item('Кожанные перчатки', 'Старые кожанные перчатки', 'equipment', 0, 5, 1, '🧤')
+
 
         #Заполняем инвентарь
+        self.player.inventory.append(hunter_knife)
+        self.player.inventory.append(leather_gloves)
+        self.player.inventory.append(hunter_knife)
+        self.player.inventory.append(leather_gloves)
+        self.player.inventory.append(hunter_knife)
+        self.player.inventory.append(leather_gloves)
+        self.player.inventory.append(hunter_knife)
+        self.player.inventory.append(leather_gloves)
+        self.player.inventory.append(hunter_knife)
+        self.player.inventory.append(leather_gloves)
         self.player.inventory.append(hunter_knife)
         self.player.inventory.append(leather_gloves)
         
@@ -207,7 +218,8 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
 
     elif text == '🧳':
         #inventory = list(game.player.inventory)
-        keyboard = [[element.name, '🖐️'] for element in game.player.inventory]  # Каждая кнопка — в новой строке    
+        keyboard = [[element.picture, element.name, '🖐️', '🗑️'] for element in game.player.inventory,
+                   ['👀']]  # Каждая кнопка — в новой строке    
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
         await update.message.reply_text('🧳', reply_markup=reply_markup)
         
@@ -457,8 +469,8 @@ threading.Thread(target=self_ping_loop, daemon=True).start()
 
 if __name__ == "__main__":
     asyncio.run(main())
-#⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦⚔️🛡🗡🏆🏷📊👕🧤🧷🚶🔎🖐 👁⬆️⬇️➡️⬅️
-
+#⛔✅ 🤷🔎 🎒⚠️🤖🛑❓🧭📦⚔️🛡🗡🏆🏷📊👕🧤🧷🚶🔎🖐 👁⬆️⬇️➡️⬅️🔪#💀 ☠️ 💥 🗡️ 🛡️
+#🗡️⚔️🗡⚔🏹🛡️🔪⚜️👑⚜🔰🔱⛏💎🏆☣⛩️✴🔥⚕☠✝🪽🪓🕷💀🌀☯🖌↗🚩💘☝🦅🏮🆕
 #👋 Waving Hand
 #🤚 Raised Back of Hand
 #🖐️ Hand With Fingers Splayed
@@ -816,6 +828,7 @@ if __name__ == "__main__":
 #🧼 Soap
 #🧽 Sponge
 #🛒 Shopping Cart
+#🗑️ :wastebasket:
 #⚰️ Coffin
 #🗿 Moai
 #

@@ -211,6 +211,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             connections = list(game.current_location.connections.keys())    
             #keyboard = [[direction] for direction in connections]  # Каждая кнопка — в новой строке    
             keyboard = [[direction for direction in connections]]  # Все кнопки — в одной строке    
+            keyboard.append(['👀','🧳'])
             reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
             await update.message.reply_text(location_desc, reply_markup=reply_markup)
         else:

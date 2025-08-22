@@ -54,7 +54,7 @@ class Item:
     def __init__(self, name, description, type = 'thing', attack = 0, defense = 0, number = 1):
         self.name = name                  # название
         self.description = description    # описание
-        self.type = type                  # тип: вещь-thing, оружие-weapon, броня-armor, ключи-key, деньги-money 
+        self.type = type                  # тип: вещь-thing, оружие-weapon, экипировка-equipment, ключи-key, деньги-money 
         self.attack = attack              # 
         self.defense = defense            #
         self.number = number              #
@@ -130,9 +130,11 @@ class Game:
 
         #Создаем вещи оружие экипировку ключи
         hunter_knife = Item('Охотничий нож', 'Хороший крепкий нож', 'weapon', 10, 0, 1)
+        leather_gloves = Item('Кожанные перчатки', 'Старые кожанные перчатки', 'equipment', 0, 5, 1)
 
         #Заполняем инвентарь
-        self.player.inventory
+        self.player.inventory.append(hunter_knife)
+        self.player.inventory.append(leather_gloves)
         
         
     def move_to(self, direction, answer):
@@ -202,6 +204,17 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             #key = game.current_location.connections[direction].key
             #await update.message.reply_text(key)
             await update.message.reply_text(', '.join(answer))
+
+    elif text == '🧳':
+        game.player.inventory
+        for element in game.player.inventory:
+            
+        keyboard = [[element.name, '🖐️'] for element in game.player.inventory]  # Каждая кнопка — в новой строке    
+        reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
+        await update.message.reply_text(location_desc, reply_markup=reply_markup)
+        
+    elif text == '👀':
+        look()
            
 
 
@@ -215,19 +228,21 @@ async def game(update: Update, context: CallbackContext) -> None:
     game = user_games.get(user_id)
     await update.message.reply_text("Добро пожаловать в текстовую бродилку!\n" +
                                     "Нажмите кнопку действия\n" +
-                                    "👁 осмотреться\n" +
-                                    "🎒 инвентарь\n" +
+                                    "👀 осмотреться\n" +
+                                    "🧳 инвентарь\n" +
                                     "⬆️ идти на север\n" +
                                     "⬇️ идти на юг\n" +
                                     "➡️ идти на восток\n" +
                                     "⬅️ идти на запад" 
                                    )
+    #👀 Eyes
+    #👁️ Eye #👁#👀 Eyes
     location_desc = game.current_location.description                #Получаем описание текущей локации
     direction = ', '.join(game.current_location.connections.keys())  #Получаем строку список направлений 
     # Создаем клавиатуру из доступных направлений (выходов)
     connections = list(game.current_location.connections.keys())     #Получаем список направлений
     keyboard = [[direction for direction in connections],
-               ['👁','🎒']]     
+               ['👀','🧳']]     
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
     await update.message.reply_text(location_desc, reply_markup=reply_markup)
 
@@ -659,7 +674,7 @@ if __name__ == "__main__":
 #🛥️ Motor Boat
 #✈️ Airplane
 #🚀 Rocket
-#🧳 Luggage
+#🧳 Luggage 
 #⌛ Hourglass Done
 #⏳ Hourglass Not Done
 #🌑 New Moon
@@ -978,4 +993,6 @@ if __name__ == "__main__":
 #💭 Thought Balloon
 #💤 Zzz
 #🤷 People & Body
-#
+# 🧛🏽‍♂️ вампир
+# 🧛🏼‍♀️
+#🦖

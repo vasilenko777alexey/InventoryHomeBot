@@ -95,6 +95,7 @@ class Game:
         self.create_world()
          # Начальная локация игрока
         self.current_location = self.locations['Деревня']
+        self.current_box = self.player.inventory
         
     def create_world(self):
         # Создаем локации
@@ -218,7 +219,9 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
 
     elif text == '🧳':
         #inventory = list(game.player.inventory)
-        keyboard = [[element.picture, element.name, '🖐️', '🗑️'] for element in game.player.inventory] # Каждая кнопка — в новой строке   
+        #.current_box
+        game.current_box = game.player.inventory
+        keyboard = [[element.picture for element in game.current_box]] # Каждая кнопка — в новой строке   
         keyboard.append(['👀'])
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  
         await update.message.reply_text('🧳', reply_markup=reply_markup)

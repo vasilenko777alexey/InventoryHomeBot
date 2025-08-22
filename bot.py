@@ -493,7 +493,7 @@ if __name__ == "__main__":
 #🦶 Foot
 #👂 Ear
 #🦻 Ear With Hearing Aid
-👃 Nose
+#👃 Nose
 #🦷 Tooth
 #🦴 Bone
 #👀 Eyes

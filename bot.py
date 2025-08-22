@@ -225,7 +225,7 @@ async def def_reply(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         #Разделяем список инвентаря на строки кратные 6
         result = []
         for i in range(0, len(game.current_box), 6):
-            sublist = game.current_box[i:i+6]
+            sublist_objects = game.current_box[i:i+6]
             sublist_picture = [obj.picture for obj in sublist_objects]
             result.append(sublist_picture)
             
